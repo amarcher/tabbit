@@ -7,13 +7,41 @@ Things you may want to cover:
 
 * Ruby version
 
-* System dependencies
+Requires Ruby 2.4.0
 
-* Configuration
+```bash
+\curl -sSL https://get.rvm.io | bash
+source ~/.rvm/scripts/rvm
+rvm install ruby-2.4.0
+rvm use ruby-2.4.0
+```
 
-* Database creation
+* Development Environment Setup
 
-* Database initialization
+Install bundler if necessary:
+
+```bash
+sudo gem install bundler
+```
+
+Install dependencies:
+
+```bash
+bundle install
+cd client && npm install && cd ..
+```
+
+Create the database
+
+```bash
+rake db:create && rake db:migrate
+```
+
+Start the dev server
+
+```bash
+rake start
+```
 
 * How to run the test suite
 
