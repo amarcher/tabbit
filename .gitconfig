@@ -1,0 +1,7 @@
+[user]
+	name = Andrew Archer
+	email = andrew.m.archer@gmail.com
+[push]
+	default = simple
+[fetch]
+	prune = true
