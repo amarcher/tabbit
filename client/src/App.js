@@ -7,13 +7,13 @@ import Ajax from './ajax';
 class App extends Component {
 
   state = {
-    id: '',
+    email: '',
     password: ''
   };
 
 
-  onIdChange = (event) => {
-    this.setState({id: event.target.value});
+  onemailChange = (event) => {
+    this.setState({email: event.target.value});
   };
 
   onPasswordChange = (event) => {
@@ -21,10 +21,10 @@ class App extends Component {
   };
 
   onClick = () => {
-    Ajax.post('/api/v1/login', this.state)
+    Ajax.post('/api/v1/sessions', {sessions: this.state})
       .then(resp => console.log(resp))
       .catch(resp => console.log(resp))
-    console.log('Id: ' + this.state.id + ' Password: ' + this.state.password)
+    console.log('email: ' + this.state.email + ' Password: ' + this.state.password)
   };
 
   render() {
@@ -37,7 +37,7 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <input placeholder="User Id" type="text" value={this.state.value} onChange={this.onIdChange} />
+        <input placeholder="User email" type="text" value={this.state.value} onChange={this.onemailChange} />
         <input placeholder="Password" type="text" value={this.state.value} onChange={this.onPasswordChange} />
         <button onClick={this.onClick}> Login </button>
       </div>
