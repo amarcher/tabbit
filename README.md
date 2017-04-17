@@ -45,6 +45,10 @@ rake start
 
 * How to run the test suite
 
+```bash
+bundle exec rspec
+```
+
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions

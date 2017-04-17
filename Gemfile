@@ -26,9 +26,15 @@ gem 'foreman', '~> 0.82.0'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+gem 'httparty'
+gem 'dotenv'
+gem 'twilio-ruby'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'rspec-rails', '~> 3.0'
   gem 'byebug', platform: :mri
+  gem 'rake'
 end
 
 group :development do
