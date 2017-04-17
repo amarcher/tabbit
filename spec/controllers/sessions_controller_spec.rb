@@ -21,30 +21,30 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
 
   describe "POST #create" do
     context "with correct credentials" do
-      let(:credentials) { { email: user.email, password: '12345678' } }
+      let(:credentials) { { 'email': user.email, 'password': '12345678' } }
 
       it "returns the user record corresponding to the given credentials" do
-        xhr :post, :create, { session: credentials }
+        xhr :post, :create, credentials
         user.reload
         expect(JSON.parse(response.body, symbolize_names: true)[:auth_token]).to eq user.auth_token
       end
 
       it 'responds with success' do
-        xhr :post, :create, { session: credentials }
+        xhr :post, :create, credentials
         expect(response.status).to eq 200
       end
     end
 
     context "when the credentials are incorrect" do
-      let(:credentials) { { email: user.email, password: 'invalidpassword' } }
+      let(:credentials) { { 'email': user.email, 'password': 'invalidpassword' } }
 
       it "returns a json with an error" do
-        xhr :post, :create, { session: credentials }
+        xhr :post, :create, credentials
         expect(JSON.parse(response.body, symbolize_names: true)[:errors]).to eq "Invalid email or password"
       end
 
       it 'responds with failure' do
-        xhr :post, :create, { session: credentials }
+        xhr :post, :create, credentials
         expect(response.status).to eq 422
       end
     end

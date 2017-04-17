@@ -21,10 +21,10 @@ class App extends Component {
   };
 
   onClick = () => {
-    Ajax.post('/api/v1/sessions', {sessions: this.state})
+    Ajax.post('/api/v1/sessions', this.state)
       .then(resp => console.log(resp))
       .catch(resp => console.log(resp))
-    console.log('email: ' + this.state.email + ' Password: ' + this.state.password)
+    console.log('email: ' + this.state.email + ' password: ' + this.state.password)
   };
 
   render() {
