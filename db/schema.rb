@@ -60,10 +60,12 @@ ActiveRecord::Schema.define(version: 20141115090600) do
     t.string   "email"
     t.string   "phone_number"
     t.integer  "avatar_rabbit_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "vm_authtoken"
     t.string   "vm_authrefreshtoken"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "auth_token"
+    t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
   end
 
 end
