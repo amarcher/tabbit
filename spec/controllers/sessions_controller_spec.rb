@@ -24,13 +24,13 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       let(:credentials) { { 'email': user.email, 'password': '12345678' } }
 
       it "returns the user record corresponding to the given credentials" do
-        xhr :post, :create, credentials
+        post :create, params: credentials
         user.reload
         expect(JSON.parse(response.body, symbolize_names: true)[:auth_token]).to eq user.auth_token
       end
 
       it 'responds with success' do
-        xhr :post, :create, credentials
+        post :create, params: credentials
         expect(response.status).to eq 200
       end
     end
@@ -39,12 +39,12 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       let(:credentials) { { 'email': user.email, 'password': 'invalidpassword' } }
 
       it "returns a json with an error" do
-        xhr :post, :create, credentials
+        post :create, params: credentials
         expect(JSON.parse(response.body, symbolize_names: true)[:errors]).to eq "Invalid email or password"
       end
 
       it 'responds with failure' do
-        xhr :post, :create, credentials
+        post :create, params: credentials
         expect(response.status).to eq 422
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
 
   describe "DELETE #destroy" do
     it 'should respond with 204' do
-      delete :destroy, id: user.auth_token
+      delete :destroy, params: { id: user.auth_token }
       expect(response.status).to eq 204
     end
   end
