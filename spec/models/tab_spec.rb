@@ -4,6 +4,11 @@ RSpec.describe Tab, type: :model do
 
   let(:tab) { Tab.new }
   let(:dine_date) { Date.today }
+  let(:user) { User.new }
+
+  before :each do
+    user.tabs << tab
+  end
 
   it 'should have methods #user, #items and #rabbits' do
     [:user, :items, :rabbits].each { |method| expect(tab).to respond_to method }

@@ -15,7 +15,7 @@ describe Authenticatable, type: :helper do
     )
   end
 
-  let(:request) { ActionController::TestRequest.new }
+  let(:request) { ActionController::TestRequest.create }
 
   before :each do
     user.save!

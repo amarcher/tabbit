@@ -11,13 +11,13 @@ RSpec.describe Api::V1::TabsController, type: :controller do
 
   describe 'GET #index' do
     it 'responds with a 200' do
-      xhr :get, :index
+      get :index
       expect(response).to be_success
       expect(response).to have_http_status(200)
     end
 
     it 'returns the tabs as json' do
-      xhr :get, :index
+      get :index
       expect(response.body).to eq([tab].to_json)
     end
   end
