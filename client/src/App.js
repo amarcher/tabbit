@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Auth from './auth';
 import Ajax from './ajax';
 
 class App extends Component {
@@ -16,9 +17,9 @@ class App extends Component {
 	}
 
 	onClick() {
-		Ajax.post('/api/v1/sessions', this.state)
-			.then(console.log) // eslint-disable-line no-console
-			.catch(console.log); // eslint-disable-line no-console
+		Auth.login(this.state).then(() => {
+			Ajax.get('/api/v1/tabs').then(console.log); // eslint-disable-line no-console
+		});
 	}
 
 	onEmailChange(event) {
