@@ -5,17 +5,14 @@ rvm:
  - "2.4.0"
 
 env:
-  - TRAVIS_NODE_VERSION="6"
+ - TRAVIS_NODE_VERSION="6"
 
-services:
-  - postgresql
+before_install:
+ - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
 
 install:
   - bundle install
   - npm --prefix client install
-
-before_script:
-  - psql -c 'create database tabbit_rabbit_api_test;' -U postgres
 
 script:
   - bundle exec rspec spec
