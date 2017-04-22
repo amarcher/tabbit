@@ -1,7 +1,10 @@
 class Api::V1::TabsController < ApplicationController
   include Authenticatable
 
+  before_filter :authorize
+
   def index
+    user = current_user
     tabs = current_user.tabs.sort_by(&:updated_at).reverse
     render json: tabs
   end
