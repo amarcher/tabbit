@@ -52,13 +52,13 @@ bundle exec rspec
 * How to run linters
 
 ```bash
-cd client && npm run lint && cd ..
+npm --prefix client run lint
 ```
 
 * How to auto-fix linting issues (that can be autofixed)
 
 ```bash
-cd client && npm run lint-fix && cd ..
+npm --prefix client run lint-fix
 ```
 
 * Services (job queues, cache servers, search engines, etc.)
