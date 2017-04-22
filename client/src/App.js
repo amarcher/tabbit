@@ -3,46 +3,64 @@ import logo from './logo.svg';
 import './App.css';
 import Ajax from './ajax';
 
-
 class App extends Component {
+	constructor(props) {
+		super(props);
 
-  state = {
-    email: '',
-    password: ''
-  };
+		this.state = {
+			email: '',
+			password: '',
+		};
 
+		this.bindEventHandlers();
+	}
 
-  onemailChange = (event) => {
-    this.setState({email: event.target.value});
-  };
+	onClick() {
+		Ajax.post('/api/v1/sessions', this.state)
+			.then(console.log) // eslint-disable-line no-console
+			.catch(console.log); // eslint-disable-line no-console
+	}
 
-  onPasswordChange = (event) => {
-    this.setState({password: event.target.value});
-  };
+	onEmailChange(event) {
+		this.setState({ email: event.target.value });
+	}
 
-  onClick = () => {
-    Ajax.post('/api/v1/sessions', this.state)
-      .then(resp => console.log(resp))
-      .catch(resp => console.log(resp))
-    console.log('email: ' + this.state.email + ' password: ' + this.state.password)
-  };
+	onPasswordChange(event) {
+		this.setState({ password: event.target.value });
+	}
 
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <input placeholder="User email" type="text" value={this.state.value} onChange={this.onemailChange} />
-        <input placeholder="Password" type="text" value={this.state.value} onChange={this.onPasswordChange} />
-        <button onClick={this.onClick}> Login </button>
-      </div>
-    );
-  }
+	bindEventHandlers() {
+		this.onClick = this.onClick.bind(this);
+		this.onEmailChange = this.onEmailChange.bind(this);
+		this.onPasswordChange = this.onPasswordChange.bind(this);
+	}
+
+	render() {
+		return (
+			<div className="App">
+				<div className="App-header">
+					<img src={logo} className="App-logo" alt="logo" />
+					<h2>Welcome to Tabbit Rabbit</h2>
+				</div>
+
+				<input
+					placeholder="User email"
+					type="text"
+					defaultValue={this.state.value}
+					onChange={this.onEmailChange}
+				/>
+
+				<input
+					placeholder="Password"
+					type="password"
+					defaultValue={this.state.value}
+					onChange={this.onPasswordChange}
+				/>
+
+				<button onClick={this.onClick}>Login </button>
+			</div>
+		);
+	}
 }
 
 export default App;

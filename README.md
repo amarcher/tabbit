@@ -49,6 +49,18 @@ rake start
 bundle exec rspec
 ```
 
+* How to run linters
+
+```bash
+npm --prefix client run lint
+```
+
+* How to auto-fix linting issues (that can be autofixed)
+
+```bash
+npm --prefix client run lint-fix
+```
+
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions

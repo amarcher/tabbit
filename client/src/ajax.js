@@ -1,14 +1,12 @@
 import 'whatwg-fetch';
 
-function stringify(params) {
-	return Object.keys(params).map(key => {
-		return `${key}=${params[key]}`;
-	}).join('&');
+function serialize(params) {
+	return Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
 }
 
 const Ajax = {
 	get(url, params = {}) {
-		return fetch(`${url}?${stringify(params)}`)
+		return fetch(`${url}?${serialize(params)}`)
 			.then(resp => resp.json());
 	},
 
@@ -16,12 +14,12 @@ const Ajax = {
 		return fetch(url, {
 			method: 'post',
 			headers: {
-		      'Content-Type': 'application/json',
-		      'Accept': 'application/json'
-		    },
-			body: JSON.stringify(params)
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+			},
+			body: JSON.stringify(params),
 		}).then(resp => resp.json());
-	}
+	},
 };
 
 module.exports = Ajax;
