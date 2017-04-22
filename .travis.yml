@@ -3,8 +3,12 @@ rvm:
  - "2.4.0"
 services:
   - postgresql
+install:
+  - cd client && npm install && cd ..
 before_script:
   - psql -c 'create database tabbit_rabbit_api_test;' -U postgres
 
 # uncomment this line if your project needs to run something other than `rake`:
-script: bundle exec rspec spec
+script:
+  - bundle exec rspec spec
+  - cd client && npm run lint && cd ..

@@ -9,21 +9,23 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3"
+    "eslint-plugin-react": "^6.10.3",
+    "jscs": "^3.0.7",
+    "react-scripts": "0.9.5"
   },
   "license": "ISC",
+  "main": "index.jsx",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "./node_modules/.bin/eslint client/src/",
-    "lint-fix": "./node_modules/.bin/eslint client/src/ --fix"
+    "lint": "./node_modules/.bin/eslint --ext .js --ext .jsx src && ./node_modules/.bin/jscs src --preset=airbnb",
+    "lint-fix": "./node_modules/.bin/eslint --ext .js --ext .jsx src --fix && ./node_modules/.bin/jscs src --preset=airbnb --fix"
   },
   "proxy": "http://localhost:3001/",
   "author": "Andrew Archer, Russell Salerno",
