@@ -12,8 +12,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 const ConnectedApp = connect(
-  mapStateToProps,
-  mapDispatchToProps,
+	mapStateToProps,
+	mapDispatchToProps,
 )(App);
 
 export default ConnectedApp;
