@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import App from './App';
+import ConnectedApp from './components/ConnectedApp';
 import './index.css';
 
 // Components
@@ -13,7 +13,7 @@ import store, { history } from './store';
 const router = (
 	<Provider store={store}>
 		<Router history={history}>
-			<Route path="/" component={App}>
+			<Route path="/" component={ConnectedApp}>
 				<IndexRoute component={Login} />
 				<Route component={Login} />
 			</Route>
