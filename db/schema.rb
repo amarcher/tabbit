@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20141115090600) do
 
   create_table "tabs", force: :cascade do |t|
     t.string   "name",       default: "Untitled Tab"
-    t.date     "dine_date",  default: '2017-04-16'
+    t.date     "dine_date",  default: '2017-04-22'
     t.text     "raw_text"
     t.string   "url"
     t.string   "img_url"
