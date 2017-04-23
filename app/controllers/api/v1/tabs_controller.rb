@@ -9,7 +9,7 @@ class Api::V1::TabsController < ApplicationController
     render json: tabs
   end
 
-  def new
+  def create
     tab = Tab.new(name: "Untitled Tab")
     tab.items << Item.create(price: 0)
     tab.user = current_user
@@ -57,21 +57,6 @@ end
 # # before * do
 # # 	redirect '/login' unless authenticated?
 # # end
-
-# def create
-#   user = current_user
-#   tab = Tab.create(name: "Untitled Tab")
-#   tab.items = get_items(params)
-#   tab.user = @user
-#   tab.rabbits << Rabbit.find(user.avatar_rabbit_id)
-#   if tab.save
-#     redirect "/tab/#{@tab.id}"
-#   else
-#     session[:tab] = tab
-#     session[:errors] = "Could not save tab"
-#     redirect '/tab/new'
-#   end
-# end
 
 # # get '/tab/:tab_id/totals' do
 # # 	@user = current_user
