@@ -7,15 +7,18 @@ import './index.css';
 // Components
 import Login from './components/Login';
 
-console.log(Login);
+import { Provider } from 'react-redux';
+import store, { history } from './store';
 
 const router = (
-	<Router history={browserHistory}>
-		<Route path="/" component={App}>
-			<IndexRoute component={Login} />
-			<Route component={Login} />
-		</Route>
-	</Router>
+	<Provider store={store}>
+		<Router history={history}>
+			<Route path="/" component={App}>
+				<IndexRoute component={Login} />
+				<Route component={Login} />
+			</Route>
+		</Router>
+	</Provider>
 );
 
 ReactDOM.render(
