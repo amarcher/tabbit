@@ -6,6 +6,7 @@
   "dependencies": {
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-router": "^2.4.0",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
