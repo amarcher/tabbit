@@ -1,14 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import './app.css';
 
-class App extends Component {
-	render() {
-		return (
-			<div>
-				{React.cloneElement(this.props.children, this.props)}
-			</div>
-		);
-	}
+function App(props) {
+	return (
+		<div>
+			{React.cloneElement(props.children, props)}
+		</div>
+	);
 }
+
+
+App.propTypes = {
+	children: PropTypes.element.isRequired,
+};
+
 
 export default App;

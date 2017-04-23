@@ -6,7 +6,7 @@ import rootReducer from './reducers/index';
 
 
 const defaultState = {
-}
+};
 
 const store = createStore(rootReducer, defaultState);
 
