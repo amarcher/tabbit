@@ -9,11 +9,12 @@
         "import"
     ],
     "rules": {
-        "indent": ["error", "tab"],
+        "indent": ["error", "tab", { "SwitchCase": 1 }],
         "react/jsx-indent":  ["error", "tab"],
         "react/jsx-indent-props":  ["error", "tab"],
         "react/jsx-filename-extension": "off",
-        "no-tabs": "off"
+        "no-tabs": "off",
+        "max-len": ["error", 120]
     },
     "globals": {
         "it": true

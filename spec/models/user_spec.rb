@@ -22,7 +22,7 @@ RSpec.describe User, type: :model do
   end
 
   it 'should create a rabbit before_create, assign that rabbit to be its avatar & add it to its rabbits' do
-    expect(Rabbit).to receive(:create).with(name: 'Andrew', email: 'aarcher520@gmail.com', phone_number: '415-555-5555')
+    expect(Rabbit).to receive(:create).with(name: 'Andrew', email: 'aarcher520@gmail.com', phone_number: '415-555-5555', user_id: 1)
                                       .and_return(rabbit)
     user.save!
     expect(user.avatar_rabbit_id).to eq 123
