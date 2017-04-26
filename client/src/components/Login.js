@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Auth from '../auth';
-import Ajax from '../ajax';
+import PropTypes from 'prop-types';
+import { login } from '../actions/actionCreators';
 
 export default class Login extends Component {
 	constructor(props) {
@@ -15,9 +15,7 @@ export default class Login extends Component {
 	}
 
 	onClick() {
-		Auth.login(this.state).then(() => {
-			Ajax.get('/api/v1/tabs').then(console.log); // eslint-disable-line no-console
-		});
+		this.props.login(this.state);
 	}
 
 	onEmailChange(event) {
@@ -60,3 +58,11 @@ export default class Login extends Component {
 		);
 	}
 }
+
+Login.propTypes = {
+	login: PropTypes.func,
+};
+
+Login.defaultProps = {
+	login,
+};

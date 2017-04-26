@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './app.css';
+import './App.css';
 
 function App(props) {
 	return (

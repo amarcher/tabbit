@@ -11,6 +11,7 @@
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.8",
     "redux": "^3.6.0",
+    "redux-saga": "^0.14.8",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

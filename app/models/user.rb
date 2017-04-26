@@ -22,10 +22,11 @@ class User < ActiveRecord::Base
     end while self.class.exists?(auth_token: auth_token)
   end
 
-  before_create do
-    rabbit = Rabbit.create(name: name, email: email, phone_number: phone_number)
+  after_create do
+    rabbit = Rabbit.create(name: name, email: email, phone_number: phone_number, user_id: self.id)
     self.avatar_rabbit_id = rabbit.id
-    rabbits << rabbit
+    self.rabbits << rabbit
     generate_authentication_token!
+    self.save!
   end
 end

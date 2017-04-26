@@ -1,3 +1,4 @@
 {
-    "validateIndentation": "\t"
+    "validateIndentation": "\t",
+    "maximumLineLength": 120
 }
