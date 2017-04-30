@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 import { login } from '../actions/actionCreators';
 
 export default class Login extends Component {
@@ -14,7 +15,8 @@ export default class Login extends Component {
 		this.bindEventHandlers();
 	}
 
-	onClick() {
+	onSubmit(event) {
+		event.preventDefault();
 		this.props.login(this.state);
 	}
 
@@ -27,7 +29,7 @@ export default class Login extends Component {
 	}
 
 	bindEventHandlers() {
-		this.onClick = this.onClick.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
 		this.onEmailChange = this.onEmailChange.bind(this);
 		this.onPasswordChange = this.onPasswordChange.bind(this);
 	}
@@ -39,21 +41,25 @@ export default class Login extends Component {
 					<h2>Welcome to Tabbit Rabbit</h2>
 				</div>
 
-				<input
-					placeholder="User email"
-					type="text"
-					defaultValue={this.state.value}
-					onChange={this.onEmailChange}
-				/>
+				<form onSubmit={this.onSubmit}>
+					<input
+						placeholder="User email"
+						type="text"
+						defaultValue={this.state.email}
+						onChange={this.onEmailChange}
+					/>
 
-				<input
-					placeholder="Password"
-					type="password"
-					defaultValue={this.state.value}
-					onChange={this.onPasswordChange}
-				/>
+					<input
+						placeholder="Password"
+						type="password"
+						defaultValue={this.state.password}
+						onChange={this.onPasswordChange}
+					/>
 
-				<button onClick={this.onClick}>Login </button>
+					<button type="submit">Login</button>
+				</form>
+
+				<Link to="/signup">Sign Up</Link>
 			</div>
 		);
 	}

@@ -7,8 +7,12 @@ function setCookie(resp) {
 const Auth = {
 	login(credentials) {
 		return post('/api/v1/sessions', credentials)
-			.then(setCookie)
-			.catch(console.log); // eslint-disable-line no-console
+			.then(setCookie);
+	},
+
+	createUser(credentials) {
+		return post('/api/v1/user/create', credentials)
+			.then(setCookie);
 	},
 
 	logout() {

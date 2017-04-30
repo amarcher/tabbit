@@ -17,17 +17,14 @@ def login
 end
 
 def create
-  user_params = Hash[params[:user].map { |k,v| [k.to_sym, v] } ]
-  session[:user] = user_params
-  @user = User.new(params[:user])
-  @user.password = params[:password]
-  if @user.save
-    session[:user] = nil
-    session[:user_id] = @user.id
-    redirect '/'
+  @user = User.new(name: params['name'], phone_number: params['phone'], email: params['email'])
+  @user.password = params['password']
+  if @user.save!
+    @user.generate_authentication_token!
+    @user.save!
+    render json: @user, status: 200
   else
-    session[:errors] = @user.errors
-    redirect '/users/new'
+    render json: { errors: "Could not create user" }, status: 422
   end
 end
 

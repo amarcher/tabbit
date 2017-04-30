@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import ConnectedApp from './components/ConnectedApp';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
 import TabList from './components/TabList';
 import TabEditor from './components/TabEditor';
 import store, { history } from './store';
@@ -14,6 +15,7 @@ const router = (
 		<Router history={history}>
 			<Route path="/" component={ConnectedApp}>
 				<IndexRoute component={Login} />
+				<Route path="/signup" component={SignUp} />
 				<Route path="/tabs" component={TabList} />
 				<Route path="/tab/:id/edit" component={TabEditor} />
 			</Route>

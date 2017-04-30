@@ -16,3 +16,10 @@ export function login(credentials) {
 		credentials,
 	};
 }
+
+export function createUser(credentials) {
+	return {
+		type: 'USER_CREATE_REQUESTED',
+		credentials,
+	};
+}
