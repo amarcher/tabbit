@@ -7,8 +7,23 @@ function* getTabs() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/tabs'));
 		yield put({
-			type: 'TAB_FETCH_SUCCEEDED',
+			type: 'TABS_FETCH_SUCCEEDED',
 			tabs: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'TABS_FETCH_FAILED',
+			message: e.message,
+		});
+	}
+}
+
+function* getTab(action) {
+	try {
+		const resp = yield call(ajax.get.bind(undefined, `/api/v1/tabs/${action.tabId}`));
+		yield put({
+			type: 'TAB_FETCH_SUCCEEDED',
+			tab: resp,
 		});
 	} catch (e) {
 		yield put({
@@ -64,11 +79,28 @@ function* createUser(action) {
 	}
 }
 
+function* createItem(action) {
+	try {
+		const resp = yield call(ajax.post.bind(undefined, `/api/v1/tabs/${action.tabId}/items`, action.item));
+		yield put({
+			type: 'ITEM_CREATE_SUCCEEDED',
+			item: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'ITEM_CREATE_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* saga() {
-	yield takeEvery('TAB_FETCH_REQUESTED', getTabs);
+	yield takeEvery('TABS_FETCH_REQUESTED', getTabs);
+	yield takeEvery('TAB_FETCH_REQUESTED', getTab);
 	yield takeEvery('TAB_CREATE_REQUESTED', createTab);
 	yield takeEvery('LOGIN_REQUESTED', login);
 	yield takeEvery('USER_CREATE_REQUESTED', createUser);
+	yield takeEvery('ITEM_CREATE_REQUESTED', createItem);
 }
 
 export default saga;
