@@ -1,6 +1,13 @@
 export function getTabs() {
 	return {
+		type: 'TABS_FETCH_REQUESTED',
+	};
+}
+
+export function getTab(tabId) {
+	return {
 		type: 'TAB_FETCH_REQUESTED',
+		tabId,
 	};
 }
 
@@ -23,3 +30,12 @@ export function createUser(credentials) {
 		credentials,
 	};
 }
+
+export function createItem(tabId, item) {
+	return {
+		type: 'ITEM_CREATE_REQUESTED',
+		tabId,
+		item,
+	};
+}
+

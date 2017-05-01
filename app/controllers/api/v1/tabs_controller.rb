@@ -9,6 +9,11 @@ class Api::V1::TabsController < ApplicationController
     render json: tabs
   end
 
+  def show
+    tab = Tab.includes(:rabbits).includes(:items).find(params[:id])
+    render json: tab, :include => [:items, :rabbits]
+  end
+
   def create
     tab = Tab.new(name: "Untitled Tab")
     tab.items << Item.create(price: 0)
@@ -65,15 +70,6 @@ end
 # # 	@subtotal = @rabbits.map { |rabbit| rabbit.subtotal(@tab) }.reduce(:+)
 # # 	erb :'tab/totals'
 # # end
-
-
-# def show
-# 	content_type :json
-# 	tab = Tab.includes(:rabbits).includes(:items).find(params[:tab_id])
-# 	rabbits = tab.rabbits
-# 	items = tab.items
-# 	{tab: tab, rabbits: rabbits, items: items, item_owners: item_owners(items)}.to_json
-# end
 
 # def rename
 # 	@tab = Tab.find(params[:id])

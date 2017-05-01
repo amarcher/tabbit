@@ -3,9 +3,11 @@ import { item } from '../propTypes';
 
 export default class Item extends Component { // eslint-disable-line react/prefer-stateless-function
 	render() {
+		const { name, price } = this.props.item;
+
 		return (
 			<div>
-				<span>{this.props.item.name}</span>
+				<span>{name}</span> - <span>{price}</span>
 			</div>
 		);
 	}
