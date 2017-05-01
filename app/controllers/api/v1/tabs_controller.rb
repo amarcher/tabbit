@@ -1,7 +1,7 @@
 class Api::V1::TabsController < ApplicationController
   include Authenticatable
 
-  before_filter :authorize
+  before_action :authorize
 
   def index
     user = current_user

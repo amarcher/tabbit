@@ -49,10 +49,26 @@ function* login(action) {
 	}
 }
 
+function* createUser(action) {
+	try {
+		yield call(Auth.createUser.bind(undefined, action.credentials));
+		history.push('/tabs');
+		yield put({
+			type: 'USER_CREATE_SUCCEEDED',
+		});
+	} catch (e) {
+		yield put({
+			type: 'USER_CREATE_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* saga() {
 	yield takeEvery('TAB_FETCH_REQUESTED', getTabs);
 	yield takeEvery('TAB_CREATE_REQUESTED', createTab);
 	yield takeEvery('LOGIN_REQUESTED', login);
+	yield takeEvery('USER_CREATE_REQUESTED', createUser);
 }
 
 export default saga;
