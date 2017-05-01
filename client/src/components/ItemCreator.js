@@ -35,10 +35,13 @@ export default class ItemCreator extends Component {
 
 	render() {
 		return (
-			
+			<form
+				onSubmit={this.onSubmit}
+				ref={(form) => {
+					this.form = form;
+				}}
 
-
-<form ref={(form) => { this.form = form; }} onSubmit={this.onSubmit}>
+			>
 				<input name="name" type="text" placeholder="Name" onChange={this.onFieldChange} />
 				<input name="price" type="number" step="any" placeholder="Price" onChange={this.onFieldChange} />
 				<button type="submit">+</button>
