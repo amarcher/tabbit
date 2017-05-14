@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import { login } from '../actions/actionCreators';
+import { Link, Redirect } from 'react-router-dom';
+import connect from '../connect';
 
-export default class Login extends Component {
+class Login extends Component {
 	constructor(props) {
 		super(props);
 
@@ -20,21 +20,20 @@ export default class Login extends Component {
 		this.props.login(this.state);
 	}
 
-	onEmailChange(event) {
-		this.setState({ email: event.target.value });
-	}
-
-	onPasswordChange(event) {
-		this.setState({ password: event.target.value });
+	onFieldChange(event) {
+		this.setState({ [event.target.name]: event.target.value });
 	}
 
 	bindEventHandlers() {
 		this.onSubmit = this.onSubmit.bind(this);
-		this.onEmailChange = this.onEmailChange.bind(this);
-		this.onPasswordChange = this.onPasswordChange.bind(this);
+		this.onFieldChange = this.onFieldChange.bind(this);
 	}
 
 	render() {
+		if (this.props.authorized) {
+			return <Redirect to="/tabs" />;
+		}
+
 		return (
 			<div className="App">
 				<div className="App-header">
@@ -43,17 +42,19 @@ export default class Login extends Component {
 
 				<form onSubmit={this.onSubmit}>
 					<input
+						name="email"
 						placeholder="User email"
 						type="text"
 						defaultValue={this.state.email}
-						onChange={this.onEmailChange}
+						onChange={this.onFieldChange}
 					/>
 
 					<input
+						name="password"
 						placeholder="Password"
 						type="password"
 						defaultValue={this.state.password}
-						onChange={this.onPasswordChange}
+						onChange={this.onFieldChange}
 					/>
 
 					<button type="submit">Login</button>
@@ -66,9 +67,8 @@ export default class Login extends Component {
 }
 
 Login.propTypes = {
-	login: PropTypes.func,
+	login: PropTypes.func.isRequired,
+	authorized: PropTypes.bool.isRequired,
 };
 
-Login.defaultProps = {
-	login,
-};
+export default connect(Login);

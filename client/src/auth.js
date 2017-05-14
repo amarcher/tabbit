@@ -1,4 +1,4 @@
-import { post } from './ajax';
+import { post, getAuthToken } from './ajax';
 
 function setCookie(resp) {
 	document.cookie = `auth_token=${resp.auth_token}; `;
@@ -19,6 +19,10 @@ const Auth = {
 		setCookie({
 			auth_token: '',
 		});
+	},
+
+	hasToken() {
+		return !!getAuthToken();
 	},
 };
 

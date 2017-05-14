@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createItem } from '../actions/actionCreators';
+import connect from '../connect';
 
-export default class ItemCreator extends Component {
+class ItemCreator extends Component {
 	constructor(props) {
 		super(props);
 
@@ -52,9 +52,7 @@ export default class ItemCreator extends Component {
 
 ItemCreator.propTypes = {
 	tabId: PropTypes.number.isRequired,
-	createItem: PropTypes.func,
+	createItem: PropTypes.func.isRequired,
 };
 
-ItemCreator.defaultProps = {
-	createItem,
-};
+export default connect(ItemCreator);

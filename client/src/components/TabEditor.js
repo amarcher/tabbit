@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { tab } from '../propTypes';
-import { getTab } from '../actions/actionCreators';
 import Item from './Item';
 import ItemCreator from './ItemCreator';
+import connect from '../connect';
 
-export default class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function
+class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function
 	componentWillMount() {
 		const currentTab = this.getTab();
 
@@ -15,7 +15,7 @@ export default class TabEditor extends Component { // eslint-disable-line react/
 	}
 
 	getTabId() {
-		return parseInt(this.props.params.id, 10);
+		return parseInt(this.props.match.params.id, 10);
 	}
 
 	getTab() {
@@ -46,13 +46,16 @@ export default class TabEditor extends Component { // eslint-disable-line react/
 
 TabEditor.propTypes = {
 	tabs: PropTypes.arrayOf(tab),
-	getTab: PropTypes.func,
-	params: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+	match: PropTypes.shape({
+		params: PropTypes.shape({
+			id: PropTypes.string.isRequired,
+		}).isRequired,
 	}).isRequired,
+	getTab: PropTypes.func.isRequired,
 };
 
 TabEditor.defaultProps = {
 	tabs: [],
-	getTab,
 };
+
+export default connect(TabEditor);

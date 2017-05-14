@@ -1,11 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TabPreview from './TabPreview';
-import { getTabs, createTab } from '../actions/actionCreators';
+import connect from '../connect';
 
-export default class TabList extends Component {
+class TabList extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			creatingNewTab: false,
+		};
+
+		this.bindEventHandlers();
+	}
+
 	componentWillMount() {
 		this.props.getTabs();
+	}
+
+	componentWillUpdate(nextProps) {
+		if (this.state.creatingNewTab && (nextProps.tabs.length > this.props.tabs.length)) {
+			const newlyCreatedTab = nextProps.tabs[nextProps.tabs.length - 1];
+			this.props.history.push(`/tab/${newlyCreatedTab.id}/edit`);
+		}
+	}
+
+	onCreateNewTab() {
+		this.setState({ creatingNewTab: true });
+		this.props.createTab();
+	}
+
+	bindEventHandlers() {
+		this.onCreateNewTab = this.onCreateNewTab.bind(this);
 	}
 
 	render() {
@@ -14,13 +40,16 @@ export default class TabList extends Component {
 		return (
 			<div>
 				{tabs}
-				<button onClick={this.props.createTab}>New Tab</button>
+				<button onClick={this.onCreateNewTab}>New Tab</button>
 			</div>
 		);
 	}
 }
 
 TabList.propTypes = {
+	history: PropTypes.shape({
+		push: PropTypes.func.isRequired,
+	}).isRequired,
 	tabs: PropTypes.arrayOf(PropTypes.object),
 	getTabs: PropTypes.func.isRequired,
 	createTab: PropTypes.func.isRequired,
@@ -28,6 +57,6 @@ TabList.propTypes = {
 
 TabList.defaultProps = {
 	tabs: [],
-	getTabs,
-	createTab,
 };
+
+export default connect(TabList);

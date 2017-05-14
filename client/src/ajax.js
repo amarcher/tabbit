@@ -40,6 +40,8 @@ const Ajax = {
 			body: JSON.stringify(params),
 		}).then(resp => resp.json());
 	},
+
+	getAuthToken,
 };
 
 module.exports = Ajax;
