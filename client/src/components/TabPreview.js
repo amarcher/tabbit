@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { tab } from '../propTypes';
 
 export default class TabPreview extends Component { // eslint-disable-line react/prefer-stateless-function

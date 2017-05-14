@@ -24,6 +24,12 @@ export function login(credentials) {
 	};
 }
 
+export function logout() {
+	return {
+		type: 'LOGOUT',
+	};
+}
+
 export function createUser(credentials) {
 	return {
 		type: 'USER_CREATE_REQUESTED',

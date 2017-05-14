@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { createUser } from '../actions/actionCreators';
+import connect from '../connect';
 
-export default class SignUp extends Component {
+class SignUp extends Component {
 	constructor(props) {
 		super(props);
 
@@ -81,9 +81,7 @@ export default class SignUp extends Component {
 }
 
 SignUp.propTypes = {
-	createUser: PropTypes.func,
+	createUser: PropTypes.func.isRequired,
 };
 
-SignUp.defaultProps = {
-	createUser,
-};
+export default connect(SignUp);

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
+import authorizationReducer from './authorizationReducer';
 import tabReducer from './tabReducer';
 
 const rootReducer = combineReducers({
-	routing: routerReducer,
+	authorized: authorizationReducer,
 	tabs: tabReducer,
 });
 

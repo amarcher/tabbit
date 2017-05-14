@@ -8,8 +8,7 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
-    "react-router": "^2.4.0",
-    "react-router-redux": "^4.0.8",
+    "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
     "redux-saga": "^0.14.8",
     "whatwg-fetch": "^2.0.3"

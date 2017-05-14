@@ -3,9 +3,20 @@ import ajax from '../ajax';
 import { history } from '../store';
 import Auth from '../auth';
 
+function isUnauthorized(resp) {
+	return resp.errors && resp.errors === 'Unauthorized';
+}
+
 function* getTabs() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/tabs'));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGOUT',
+			});
+		}
+
 		yield put({
 			type: 'TABS_FETCH_SUCCEEDED',
 			tabs: resp,
@@ -21,6 +32,13 @@ function* getTabs() {
 function* getTab(action) {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, `/api/v1/tabs/${action.tabId}`));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGOUT',
+			});
+		}
+
 		yield put({
 			type: 'TAB_FETCH_SUCCEEDED',
 			tab: resp,
@@ -36,7 +54,13 @@ function* getTab(action) {
 function* createTab() {
 	try {
 		const resp = yield call(ajax.post.bind(undefined, '/api/v1/tabs'));
-		history.push(`/tab/${resp.id}/edit`);
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGOUT',
+			});
+		}
+
 		yield put({
 			type: 'TAB_CREATE_SUCCEEDED',
 			tab: resp,
@@ -52,7 +76,6 @@ function* createTab() {
 function* login(action) {
 	try {
 		yield call(Auth.login.bind(undefined, action.credentials));
-		history.push('/tabs');
 		yield put({
 			type: 'LOGIN_SUCCEEDED',
 		});
@@ -82,6 +105,13 @@ function* createUser(action) {
 function* createItem(action) {
 	try {
 		const resp = yield call(ajax.post.bind(undefined, `/api/v1/tabs/${action.tabId}/items`, action.item));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGOUT',
+			});
+		}
+
 		yield put({
 			type: 'ITEM_CREATE_SUCCEEDED',
 			item: resp,
