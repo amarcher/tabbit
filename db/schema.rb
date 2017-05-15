@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20141115090600) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "items", force: :cascade do |t|
     t.string   "name"
     t.integer  "price"
@@ -65,7 +68,7 @@ ActiveRecord::Schema.define(version: 20141115090600) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "auth_token"
-    t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
+    t.index ["auth_token"], name: "index_users_on_auth_token", unique: true, using: :btree
   end
 
 end
