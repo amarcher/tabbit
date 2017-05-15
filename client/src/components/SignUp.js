@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import connect from '../connect';
 
@@ -32,6 +32,10 @@ class SignUp extends Component {
 	}
 
 	render() {
+		if (this.props.authorized) {
+			return <Redirect to="/tabs" />;
+		}
+
 		return (
 			<div className="App">
 				<div className="App-header">
@@ -82,6 +86,7 @@ class SignUp extends Component {
 
 SignUp.propTypes = {
 	createUser: PropTypes.func.isRequired,
+	authorized: PropTypes.bool.isRequired,
 };
 
 export default connect(SignUp);
