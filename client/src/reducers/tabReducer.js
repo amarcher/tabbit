@@ -1,7 +1,18 @@
-function upsertAtIndex(item, items, index) {
+function upsert(itemToUpsert, items) {
+	const index = items.findIndex(item => item.id === itemToUpsert.id);
+
 	return [
 		...items.splice(0, index),
-		item,
+		itemToUpsert,
+		...items.splice(index + 1),
+	];
+}
+
+function remove(itemToRemove, items) {
+	const index = items.findIndex(item => item.id === itemToRemove.id);
+
+	return [
+		...items.splice(0, index),
 		...items.splice(index + 1),
 	];
 }
@@ -16,8 +27,7 @@ export default function tabReducer(tabs = [], action) {
 				action.tab,
 			];
 		case 'TAB_FETCH_SUCCEEDED': {
-			const tabIndex = tabs.findIndex(tab => tab.id === action.tab.id);
-			return upsertAtIndex(action.tab, tabs, tabIndex);
+			return upsert(action.tab, tabs);
 		}
 
 		case 'ITEM_CREATE_SUCCEEDED': {
@@ -31,7 +41,17 @@ export default function tabReducer(tabs = [], action) {
 				items: newItems,
 			});
 
-			return upsertAtIndex(newTab, tabs, tabIndex);
+			return upsert(newTab, tabs);
+		}
+
+		case 'ITEM_DELETE_SUCCEEDED': {
+			const tabIndex = tabs.findIndex(tab => tab.id === action.item.tab_id);
+
+			const newTab = Object.assign({}, tabs[tabIndex], {
+				items: remove(action.item, tabs[tabIndex].items),
+			});
+
+			return upsert(newTab, tabs);
 		}
 
 		default:

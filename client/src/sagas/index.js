@@ -124,6 +124,28 @@ function* createItem(action) {
 	}
 }
 
+function* deleteItem(action) {
+	try {
+		const resp = yield call(ajax.delete.bind(undefined, `/api/v1/tabs/${action.tabId}/items/${action.item.id}`));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGOUT',
+			});
+		}
+
+		yield put({
+			type: 'ITEM_DELETE_SUCCEEDED',
+			item: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'ITEM_DELETE_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* saga() {
 	yield takeEvery('TABS_FETCH_REQUESTED', getTabs);
 	yield takeEvery('TAB_FETCH_REQUESTED', getTab);
@@ -131,6 +153,7 @@ function* saga() {
 	yield takeEvery('LOGIN_REQUESTED', login);
 	yield takeEvery('USER_CREATE_REQUESTED', createUser);
 	yield takeEvery('ITEM_CREATE_REQUESTED', createItem);
+	yield takeEvery('ITEM_DELETE_REQUESTED', deleteItem);
 }
 
 export default saga;
