@@ -41,6 +41,18 @@ const Ajax = {
 		}).then(resp => resp.json());
 	},
 
+	delete(url, params = {}) {
+		return fetch(url, {
+			method: 'delete',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+				Authorization: getAuthToken(),
+			},
+			body: JSON.stringify(params),
+		}).then(resp => resp.json());
+	},
+
 	getAuthToken,
 };
 

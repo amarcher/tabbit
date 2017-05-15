@@ -5,7 +5,6 @@ import connect from '../connect';
 
 const PrivateRoute = ({ component: Component, authorized, ...rest }) => {
 	const render = (props) => {
-		console.log(props.location);
 		if (authorized) {
 			return (
 				<Component {...props} />

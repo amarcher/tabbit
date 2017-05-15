@@ -6,4 +6,13 @@ class Api::V1::ItemsController < ApplicationController
       render json: item
     end
   end
+
+  def destroy
+    tab_id = params['tab_id']
+    item_id = params['id']
+    item = Item.find(item_id)
+    if item.destroy
+      render json: item
+    end
+  end
 end

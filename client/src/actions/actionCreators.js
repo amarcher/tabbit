@@ -45,3 +45,11 @@ export function createItem(tabId, item) {
 	};
 }
 
+export function deleteItem(tabId, item) {
+	return {
+		type: 'ITEM_DELETE_REQUESTED',
+		tabId,
+		item,
+	};
+}
+
