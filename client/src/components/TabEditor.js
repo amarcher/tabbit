@@ -46,8 +46,10 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 				0,
 			);
 		}
+
 		return '';
 	}
+
 	render() {
 		return (
 			<div>
