@@ -21,8 +21,8 @@ RSpec.describe User, type: :model do
     expect(user).to respond_to :auth_token
   end
 
-  it 'should create a rabbit before_create, assign that rabbit to be its avatar & add it to its rabbits' do
-    expect(Rabbit).to receive(:create).with(name: 'Andrew', email: 'aarcher520@gmail.com', phone_number: '415-555-5555', user_id: 1)
+  it 'should create a rabbit after_create, assign that rabbit to be its avatar & add it to its rabbits' do
+    expect(Rabbit).to receive(:create).with(hash_including(name: 'Andrew', email: 'aarcher520@gmail.com', phone_number: '415-555-5555'))
                                       .and_return(rabbit)
     user.save!
     expect(user.avatar_rabbit_id).to eq 123

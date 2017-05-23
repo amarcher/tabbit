@@ -1,4 +1,4 @@
-helpers do
+module Helpers
 	TITLE = 'Tabbit Rabbit'
 
 	def dollarize(price)
@@ -38,7 +38,7 @@ helpers do
 		items
 	end
 
-	def quantity_and_name(quantity, name)		
+	def quantity_and_name(quantity, name)
 		case quantity
 		when "1", 1, nil
 			qanda = name
@@ -52,5 +52,4 @@ helpers do
 		items.map { |item| {id: item.id, rabbit_ids: item.rabbits.map(&:id) } }
 		# returns => [{id: id, rabbit_ids: []}]
 	end
-	
 end

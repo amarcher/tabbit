@@ -4,6 +4,12 @@ cache: bundler
 rvm:
  - "2.4.0"
 
+dist: trusty
+
+addons:
+  postgresql: "9.6"
+
+
 env:
  - TRAVIS_NODE_VERSION="6"
 
@@ -16,6 +22,9 @@ before_install:
 install:
   - bundle install
   - npm --prefix client install
+
+before_script:
+  - psql -c 'create database tabbit_test;'
 
 script:
   - bundle exec rspec spec

@@ -34,7 +34,6 @@
   },
   "proxy": "http://localhost:3001/",
   "author": "Andrew Archer, Russell Salerno",
-  "homepage": "https://github.com/amarcher/tabbit#readme",
   "bugs": {
     "url": "https://github.com/amarcher/tabbit/issues"
   }
