@@ -7,6 +7,14 @@ export const item = PropTypes.shape({
 	tab: PropTypes.number,
 });
 
+export const rabbit = PropTypes.shape({
+	id: PropTypes.number.isRequired,
+	name: PropTypes.string,
+	email: PropTypes.string,
+	phone_number: PropTypes.string,
+	user: PropTypes.number,
+});
+
 export const tab = PropTypes.shape({
 	id: PropTypes.number.isRequired,
 	name: PropTypes.string,

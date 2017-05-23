@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { tab as tabProps } from '../propTypes';
 import Item from './Item';
+import Rabbit from './Rabbit';
+import RabbitAdder from './RabbitAdder';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 
@@ -24,8 +27,20 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		return this.getTab().items || [];
 	}
 
+	getRabbits() {
+		return this.getTab().rabbits || [];
+	}
+
 	renderItems() {
-		return this.getItems().map(this.renderItem, this);
+		const items = this.getItems().map(this.renderItem, this);
+
+		return (
+			<div>
+				<h3>Items:</h3>
+				{items}
+				<ItemCreator {...this.props} tabId={this.getTabId()} />
+			</div>
+		);
 	}
 
 	renderItem(item) {
@@ -33,7 +48,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderSubtotal() {
-		const subtotal = this.getItems().reduce((subtotal, item) => subtotal + item.price, 0);
+		const subtotal = this.getItems().reduce((total, item) => total + item.price, 0);
 
 		if (subtotal) {
 			return (
@@ -46,12 +61,32 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		return '';
 	}
 
-	render() {
+	renderRabbits() {
+		const rabbits = this.getRabbits().map(this.renderRabbit, this);
+
 		return (
 			<div>
+				<h3>Rabbits:</h3>
+				{rabbits}
+				<RabbitAdder {...this.props} tabId={this.getTabId()} />
+			</div>
+		);
+	}
+
+	renderRabbit(rabbit) {
+		return (<Rabbit {...this.props} key={rabbit.id} rabbit={rabbit} tabId={this.getTabId()} tab={this.getTab()} />);
+	}
+
+	render() {
+		const { name } = this.getTab();
+
+		return (
+			<div>
+				<h2>{name}</h2>
 				{this.renderSubtotal()}
 				{this.renderItems()}
-				<ItemCreator {...this.props} tabId={this.getTabId()} />
+				{this.renderRabbits()}
+				<Link to="/tabs">All Tabs</Link>
 			</div>
 		);
 	}

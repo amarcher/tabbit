@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class ItemCreator extends Component {
+class RabbitAdder extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			name: '',
-			price: 0,
+			phone: '',
+			email: '',
 		};
 
 		this.bindEventHandlers();
@@ -19,11 +20,12 @@ class ItemCreator extends Component {
 
 	onSubmit(event) {
 		event.preventDefault();
-		this.props.createItem(this.props.tabId, this.state);
+		this.props.createRabbit(this.props.tabId, this.state);
 		this.form.reset();
 		this.setState({
 			name: '',
-			price: '',
+			phone: '',
+			email: '',
 		});
 	}
 
@@ -42,16 +44,17 @@ class ItemCreator extends Component {
 
 			>
 				<input name="name" type="text" placeholder="Name" onChange={this.onFieldChange} />
-				<input name="price" type="number" step="any" placeholder="Price" onChange={this.onFieldChange} />
+				<input name="phone" type="tel" placeholder="Phone" onChange={this.onFieldChange} />
+				<input name="email" type="email" placeholder="Email" onChange={this.onFieldChange} />
 				<button type="submit">+</button>
 			</form>
 		);
 	}
 }
 
-ItemCreator.propTypes = {
+RabbitAdder.propTypes = {
 	tabId: PropTypes.number.isRequired,
-	createItem: PropTypes.func.isRequired,
+	createRabbit: PropTypes.func.isRequired,
 };
 
-export default ItemCreator;
+export default RabbitAdder;

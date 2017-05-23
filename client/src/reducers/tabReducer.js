@@ -1,6 +1,13 @@
 function upsert(itemToUpsert, items) {
 	const index = items.findIndex(item => item.id === itemToUpsert.id);
 
+	if (index === -1) {
+		return [
+			...items,
+			itemToUpsert,
+		];
+	}
+
 	return [
 		...items.slice(0, index),
 		itemToUpsert,
@@ -22,37 +29,41 @@ export default function tabReducer(tabs = [], action) {
 		case 'TABS_FETCH_SUCCEEDED':
 			return action.tabs;
 		case 'TAB_CREATE_SUCCEEDED':
-			return [
-				...tabs,
-				action.tab,
-			];
-		case 'TAB_FETCH_SUCCEEDED': {
 			return upsert(action.tab, tabs);
-		}
+		case 'TAB_FETCH_SUCCEEDED':
+			return upsert(action.tab, tabs);
 
 		case 'ITEM_CREATE_SUCCEEDED': {
-			const tabIndex = tabs.findIndex(tab => tab.id === action.item.tab_id);
-			const newItems = [
-				...tabs[tabIndex].items,
-				action.item,
-			];
-
-			const newTab = Object.assign({}, tabs[tabIndex], {
-				items: newItems,
-			});
-
+			const tabToUpdate = tabs.find(tab => tab.id === action.item.tab_id);
+			const newItems = upsert(action.item, tabToUpdate.items);
+			const newTab = { ...tabToUpdate, items: newItems };
 			return upsert(newTab, tabs);
 		}
 
 		case 'ITEM_DELETE_SUCCEEDED': {
-			const tabIndex = tabs.findIndex(tab => tab.id === action.item.tab_id);
-			let newTab = Object.assign({}, tabs[tabIndex]);
-			let newItems = [...newTab.items];
-			newItems = remove(action.item, newItems);
-			newTab = Object.assign({}, tabs[tabIndex], {
-				items: newItems,
-			});
+			const tabToUpdate = tabs.find(tab => tab.id === action.item.tab_id);
+			const newItems = remove(action.item, tabToUpdate.items);
+			const newTab = { ...tabToUpdate, items: newItems };
 			return upsert(newTab, tabs);
+		}
+
+		case 'RABBIT_REMOVE_SUCCEEDED': {
+			const tabToUpdate = tabs.find(tab => tab.id === action.tabId);
+			const rabbitToRemove = tabToUpdate.rabbits.find(rabbit => rabbit.id === action.rabbitId);
+			const newRabbits = remove(rabbitToRemove, tabToUpdate.rabbits);
+			const newTab = { ...tabToUpdate, rabbits: newRabbits };
+			return upsert(newTab, tabs);
+		}
+
+		case 'RABBIT_CREATE_SUCCEEDED': {
+			if (action.tabId) {
+				const tabToUpdate = tabs.find(tab => tab.id === action.tabId);
+				const newRabbits = upsert(action.rabbit, tabToUpdate.rabbits);
+				const newTab = { ...tabToUpdate, rabbits: newRabbits };
+				return upsert(newTab, tabs);
+			}
+
+			return tabs;
 		}
 
 		default:

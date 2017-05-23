@@ -1,14 +1,26 @@
 class Api::V1::RabbitsController < ApplicationController
+include Authenticatable
+
+before_action :authorize
 
 def create
 	user = current_user
 	rabbit = Rabbit.new(name: params[:name], phone_number: params[:phone_number], email: params[:email])
-	tab = Tab.find(params[:tab_id])
-	rabbit.tabs << tab
+	if (params[:tab_id])
+		tab = Tab.find(params[:tab_id])
+		rabbit.tabs << tab
+	end
 	rabbit.user = user
-	if rabbit.save
-		content_type :json
-		rabbit.to_json
+	if rabbit.save!
+		puts 'rabbit'
+		p rabbit
+		puts 'tab'
+		p tab
+		if tab
+			render json: {rabbit: rabbit, tab_id: tab.id}
+		else
+			render json: rabbit
+		end
 	else
 		halt 400, rabbit.errors.to_json
 	end
@@ -20,8 +32,7 @@ def update
 	rabbit = Rabbit.find(params[:rabbit])
 	rabbit.tabs << tab
 	if rabbit.save
-		content_type :json
-		rabbit.to_json
+		render json: rabbit
 	else
 		halt 400, rabbit.errors.to_json
 	end
@@ -30,8 +41,7 @@ end
 def edit
 	rabbit = Rabbit.find(params[:rabbit_id])
 	if rabbit.update_attributes(params)
-		content_type :json
-		rabbit.to_json
+		render json: rabbit
 	else
 		halt 400, rabbit.errors.to_json
 	end
@@ -40,10 +50,9 @@ end
 # remove the rabbit from the tab (but not from the DB!)
 def remove_from_tab
 	tab = Tab.find(params[:tab_id])
-	rabbit = Rabbit.find(params[:rabbit_id])
-	if tab && tab.rabbits.delete(rabbit)
-		content_type :json
-		{id: rabbit.id, name: rabbit.name}.to_json
+	rabbit = Rabbit.find(params[:id])
+	if tab && tab.rabbits.delete(rabbit.id)
+		render json: { id: rabbit.id, tab_id: tab.id }
 	else
 		halt 400, rabbit.errors.to_json
 	end
@@ -53,7 +62,7 @@ end
 def destroy
 	rabbit = Tab.find(params[:rabbit_id])
 	if rabbit.destroy
-		204
+		render json: { id: rabbit.id }
 	else
 		halt 400, rabbit.errors.to_json
 	end
