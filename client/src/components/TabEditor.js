@@ -5,7 +5,12 @@ import Item from './Item';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 
-class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function
+class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
+	constructor(props) {
+		super(props);
+		this.getTab = this.getTab.bind(this);
+	}
+
 	componentWillMount() {
 		const currentTab = this.getTab();
 
@@ -34,9 +39,23 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		return (<Item {...this.props} key={item.id} item={item} tabId={this.getTabId()} />);
 	}
 
+	renderSubtotal() {
+		if (this.getTab()) {
+			return this.getTab().items.reduce(
+				(memo, curr) => memo + curr.price,
+				0,
+			);
+		}
+
+		return '';
+	}
+
 	render() {
 		return (
 			<div>
+				<div>
+					Subtotal: {this.renderSubtotal()}
+				</div>
 				{this.renderItems()}
 				<ItemCreator {...this.props} tabId={this.getTabId()} />
 			</div>
