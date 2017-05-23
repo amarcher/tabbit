@@ -1,20 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { tab } from '../propTypes';
+import { tab as tabProps } from '../propTypes';
 import Item from './Item';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 
 class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
-	constructor(props) {
-		super(props);
-		this.getTab = this.getTab.bind(this);
-	}
-
 	componentWillMount() {
-		const currentTab = this.getTab();
-
-		if (!currentTab || !currentTab.items) {
+		if (!this.getItems().length) {
 			this.props.getTab(this.getTabId());
 		}
 	}
@@ -24,15 +17,15 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	getTab() {
-		const tabId = this.getTabId();
-		return this.props.tabs.find(t => t.id === tabId);
+		return this.props.tabs.find(tab => tab.id === this.getTabId()) || {};
+	}
+
+	getItems() {
+		return this.getTab().items || [];
 	}
 
 	renderItems() {
-		const currentTab = this.getTab();
-		const items = (currentTab && currentTab.items) || [];
-
-		return items.map(this.renderItem, this);
+		return this.getItems().map(this.renderItem, this);
 	}
 
 	renderItem(item) {
@@ -40,10 +33,13 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderSubtotal() {
-		if (this.getTab()) {
-			return this.getTab().items.reduce(
-				(memo, curr) => memo + curr.price,
-				0,
+		const subtotal = this.getItems().reduce((subtotal, item) => subtotal + item.price, 0);
+
+		if (subtotal) {
+			return (
+				<div>
+					Subtotal: {subtotal}
+				</div>
 			);
 		}
 
@@ -53,9 +49,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	render() {
 		return (
 			<div>
-				<div>
-					Subtotal: {this.renderSubtotal()}
-				</div>
+				{this.renderSubtotal()}
 				{this.renderItems()}
 				<ItemCreator {...this.props} tabId={this.getTabId()} />
 			</div>
@@ -64,7 +58,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 }
 
 TabEditor.propTypes = {
-	tabs: PropTypes.arrayOf(tab),
+	tabs: PropTypes.arrayOf(tabProps),
 	match: PropTypes.shape({
 		params: PropTypes.shape({
 			id: PropTypes.string.isRequired,
