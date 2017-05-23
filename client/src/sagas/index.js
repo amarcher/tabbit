@@ -90,7 +90,6 @@ function* login(action) {
 function* createUser(action) {
 	try {
 		yield call(Auth.createUser.bind(undefined, action.credentials));
-		history.push('/tabs');
 		yield put({
 			type: 'USER_CREATE_SUCCEEDED',
 		});
