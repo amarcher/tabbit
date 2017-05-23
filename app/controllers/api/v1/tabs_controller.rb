@@ -16,7 +16,6 @@ class Api::V1::TabsController < ApplicationController
 
   def create
     tab = Tab.new(name: "Untitled Tab")
-    tab.items << Item.create(price: 0)
     tab.user = current_user
     tab.rabbits << Rabbit.find(current_user.avatar_rabbit_id)
     tab.save!

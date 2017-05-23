@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { tab } from '../propTypes';
+import { tab as tabProps } from '../propTypes';
 import Item from './Item';
+import Rabbit from './Rabbit';
+import RabbitAdder from './RabbitAdder';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 
 class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
-	constructor(props) {
-		super(props);
-		this.getTab = this.getTab.bind(this);
-	}
-
 	componentWillMount() {
-		const currentTab = this.getTab();
-
-		if (!currentTab || !currentTab.items) {
+		if (!this.getItems().length) {
 			this.props.getTab(this.getTabId());
 		}
 	}
@@ -24,15 +20,27 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	getTab() {
-		const tabId = this.getTabId();
-		return this.props.tabs.find(t => t.id === tabId);
+		return this.props.tabs.find(tab => tab.id === this.getTabId()) || {};
+	}
+
+	getItems() {
+		return this.getTab().items || [];
+	}
+
+	getRabbits() {
+		return this.getTab().rabbits || [];
 	}
 
 	renderItems() {
-		const currentTab = this.getTab();
-		const items = (currentTab && currentTab.items) || [];
+		const items = this.getItems().map(this.renderItem, this);
 
-		return items.map(this.renderItem, this);
+		return (
+			<div>
+				<h3>Items:</h3>
+				{items}
+				<ItemCreator {...this.props} tabId={this.getTabId()} />
+			</div>
+		);
 	}
 
 	renderItem(item) {
@@ -40,31 +48,52 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderSubtotal() {
-		if (this.getTab()) {
-			return this.getTab().items.reduce(
-				(memo, curr) => memo + curr.price,
-				0,
+		const subtotal = this.getItems().reduce((total, item) => total + item.price, 0);
+
+		if (subtotal) {
+			return (
+				<div>
+					Subtotal: {subtotal}
+				</div>
 			);
 		}
 
 		return '';
 	}
 
-	render() {
+	renderRabbits() {
+		const rabbits = this.getRabbits().map(this.renderRabbit, this);
+
 		return (
 			<div>
-				<div>
-					Subtotal: {this.renderSubtotal()}
-				</div>
+				<h3>Rabbits:</h3>
+				{rabbits}
+				<RabbitAdder {...this.props} tabId={this.getTabId()} />
+			</div>
+		);
+	}
+
+	renderRabbit(rabbit) {
+		return (<Rabbit {...this.props} key={rabbit.id} rabbit={rabbit} tabId={this.getTabId()} tab={this.getTab()} />);
+	}
+
+	render() {
+		const { name } = this.getTab();
+
+		return (
+			<div>
+				<h2>{name}</h2>
+				{this.renderSubtotal()}
 				{this.renderItems()}
-				<ItemCreator {...this.props} tabId={this.getTabId()} />
+				{this.renderRabbits()}
+				<Link to="/tabs">All Tabs</Link>
 			</div>
 		);
 	}
 }
 
 TabEditor.propTypes = {
-	tabs: PropTypes.arrayOf(tab),
+	tabs: PropTypes.arrayOf(tabProps),
 	match: PropTypes.shape({
 		params: PropTypes.shape({
 			id: PropTypes.string.isRequired,
