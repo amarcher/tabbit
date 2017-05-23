@@ -1,6 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import ajax from '../ajax';
-import { history } from '../store';
 import Auth from '../auth';
 
 function isUnauthorized(resp) {
