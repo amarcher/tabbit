@@ -6,7 +6,10 @@ export default function authorizationReducer(authorized = false, action) {
 		case 'USER_CREATE_SUCCEEDED':
 			return true;
 		case 'LOGOUT':
+		case 'LOGOUT_SUCCEEDED':
 		case 'LOGIN_REQUIRED':
+		case 'LOGIN_FAILED':
+		case 'USER_CREATE_FAILED':
 			Auth.logout();
 			return false;
 		default:

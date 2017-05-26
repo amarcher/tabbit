@@ -20,10 +20,7 @@ export default function rabbitReducer(rabbits = [], action) {
 		case 'RABBITS_FETCH_SUCCEEDED':
 			return action.rabbits;
 		case 'RABBIT_CREATE_SUCCEEDED':
-			return [
-				...rabbits,
-				action.rabbit,
-			];
+			return upsert(action.rabbit, rabbits);
 		case 'TAB_FETCH_SUCCEEDED':
 			if (action.tab.rabbits) {
 				return action.tab.rabbits.reduce((newRabbits, rabbit) => upsert(rabbit, newRabbits), [...rabbits]);

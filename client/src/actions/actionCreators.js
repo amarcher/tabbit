@@ -26,7 +26,7 @@ export function login(credentials) {
 
 export function logout() {
 	return {
-		type: 'LOGOUT',
+		type: 'LOGOUT_REQUESTED',
 	};
 }
 
