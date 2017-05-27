@@ -14,9 +14,10 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def destroy
-    user = User.find_by(auth_token: params[:id])
+    auth_token = params[:id] || params[:auth_token]
+    user = User.find_by(auth_token: auth_token)
     user.generate_authentication_token!
     user.save!
-    head 204
+    render json: { ok: true }, status: 200
   end
 end

@@ -1,7 +1,10 @@
-import { post, getAuthToken } from './ajax';
+import { post, destroy, getAuthToken } from './ajax';
 
-function setCookie(resp) {
-	document.cookie = `auth_token=${resp.auth_token}; `;
+function setCookie(resp = {}) {
+	const authToken = resp.auth_token || '';
+	document.cookie = `auth_token=${authToken}; `;
+
+	return resp;
 }
 
 const Auth = {
@@ -13,6 +16,10 @@ const Auth = {
 	createUser(credentials) {
 		return post('/api/v1/user/create', credentials)
 			.then(setCookie);
+	},
+
+	logoutOnServer() {
+		return destroy(`/api/v1/sessions/${getAuthToken()}`);
 	},
 
 	logout() {

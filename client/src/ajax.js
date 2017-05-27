@@ -41,7 +41,7 @@ const Ajax = {
 		}).then(resp => resp.json());
 	},
 
-	delete(url, params = {}) {
+	destroy(url, params = {}) {
 		return fetch(url, {
 			method: 'delete',
 			headers: {

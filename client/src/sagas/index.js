@@ -3,7 +3,11 @@ import ajax from '../ajax';
 import Auth from '../auth';
 
 function isUnauthorized(resp) {
-	return resp.errors && resp.errors === 'Unauthorized';
+	const unauthorizedErrors = ['Invalid email or password', 'Unauthorized', 'Unprocessable Entity'];
+	const hasUnauthorizedError = resp.errors && unauthorizedErrors.indexOf(resp.errors) > -1;
+	const hasUnauthorizedStatus = [401, 422].indexOf(resp.status) > -1;
+
+	return hasUnauthorizedStatus || hasUnauthorizedError;
 }
 
 function* getTabs() {
@@ -12,8 +16,10 @@ function* getTabs() {
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -34,8 +40,10 @@ function* getTab(action) {
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -56,8 +64,10 @@ function* createTab() {
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -74,7 +84,16 @@ function* createTab() {
 
 function* login(action) {
 	try {
-		yield call(Auth.login.bind(undefined, action.credentials));
+		const resp = yield call(Auth.login.bind(undefined, action.credentials));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_FAILED',
+			});
+
+			return;
+		}
+
 		yield put({
 			type: 'LOGIN_SUCCEEDED',
 		});
@@ -86,9 +105,33 @@ function* login(action) {
 	}
 }
 
+function* logout() {
+	try {
+		yield call(Auth.logoutOnServer);
+
+		yield put({
+			type: 'LOGOUT_SUCCEEDED',
+		});
+	} catch (e) {
+		yield put({
+			type: 'LOGOUT_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* createUser(action) {
 	try {
-		yield call(Auth.createUser.bind(undefined, action.credentials));
+		const resp = yield call(Auth.createUser.bind(undefined, action.credentials));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'USER_CREATE_FAILED',
+			});
+
+			return;
+		}
+
 		yield put({
 			type: 'USER_CREATE_SUCCEEDED',
 		});
@@ -106,8 +149,10 @@ function* createItem(action) {
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -124,12 +169,14 @@ function* createItem(action) {
 
 function* deleteItem(action) {
 	try {
-		const resp = yield call(ajax.delete.bind(undefined, `/api/v1/tabs/${action.tabId}/items/${action.item.id}`));
+		const resp = yield call(ajax.destroy.bind(undefined, `/api/v1/tabs/${action.tabId}/items/${action.item.id}`));
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -153,8 +200,10 @@ function* createRabbit(action) {
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -173,12 +222,14 @@ function* createRabbit(action) {
 function* removeRabbitFromTab(action) {
 	try {
 		const uri = `/api/v1/tabs/${action.tabId}/rabbits/${action.rabbit.id}`;
-		const resp = yield call(ajax.delete.bind(undefined, uri));
+		const resp = yield call(ajax.destroy.bind(undefined, uri));
 
 		if (isUnauthorized(resp)) {
 			yield put({
-				type: 'LOGOUT',
+				type: 'LOGIN_REQUIRED',
 			});
+
+			return;
 		}
 
 		yield put({
@@ -199,6 +250,7 @@ function* saga() {
 	yield takeEvery('TAB_FETCH_REQUESTED', getTab);
 	yield takeEvery('TAB_CREATE_REQUESTED', createTab);
 	yield takeEvery('LOGIN_REQUESTED', login);
+	yield takeEvery('LOGOUT_REQUESTED', logout);
 	yield takeEvery('USER_CREATE_REQUESTED', createUser);
 	yield takeEvery('ITEM_CREATE_REQUESTED', createItem);
 	yield takeEvery('ITEM_DELETE_REQUESTED', deleteItem);
