@@ -51,9 +51,9 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    it 'should respond with 204' do
+    it 'should respond with 200' do
       delete :destroy, params: { id: user.auth_token }
-      expect(response.status).to eq 204
+      expect(response.status).to eq 200
     end
   end
 end
