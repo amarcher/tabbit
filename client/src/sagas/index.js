@@ -191,7 +191,6 @@ function* deleteItem(action) {
 	}
 }
 
-
 function* getRabbits() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/rabbits'));

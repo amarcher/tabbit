@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { rabbit as rabbitProp } from '../propTypes'
+import { rabbit as rabbitProp } from '../propTypes';
 
 const defaultState = {
 	name: '',
@@ -47,22 +47,23 @@ class RabbitAdder extends Component {
 		const onRabbitResultClick = this.onRabbitResultClick.bind(this, rabbit);
 
 		return (
-			<button type="button" key={rabbit.id} onClick={onRabbitResultClick}><span>{rabbit.name}</span>-<span>{rabbit.phone_number}</span></button>
-		)
+			<button type="button" key={rabbit.id} onClick={onRabbitResultClick}>
+				<span>{rabbit.name}</span>-<span>{rabbit.phone_number}</span>
+			</button>
+		);
 	}
 
 	renderResults() {
-		const { name, phone_number, email } = this.state;
+		const { name } = this.state;
 
-		if (!name && !phone_number && !email) {
+		if (!name) {
 			return '';
 		}
 
-		const results = this.props.unusedRabbits.filter((rabbit) => {
-			return rabbit.name.toLowerCase().indexOf(name.toLowerCase()) > -1;
-		}).sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase());
-
-		const displayedResults = results.slice(0, 10).map(this.renderResult, this);
+		const { unusedRabbits } = this.props;
+		const results = unusedRabbits.filter(rabbit => rabbit.name.toLowerCase().indexOf(name.toLowerCase()) > -1);
+		const sortedResults = results.sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase());
+		const displayedResults = sortedResults.slice(0, 10).map(this.renderResult, this);
 
 		return (
 			<div className="results">
@@ -94,6 +95,7 @@ class RabbitAdder extends Component {
 RabbitAdder.propTypes = {
 	tabId: PropTypes.number.isRequired,
 	unusedRabbits: PropTypes.arrayOf(rabbitProp).isRequired,
+	addRabbitToTab: PropTypes.func.isRequired,
 	createRabbit: PropTypes.func.isRequired,
 };
 

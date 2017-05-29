@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { tab as tabProps } from '../propTypes';
+import { tab as tabProps, rabbit as rabbitProps } from '../propTypes';
 import Item from './Item';
 import Rabbit from './Rabbit';
 import RabbitAdder from './RabbitAdder';
@@ -64,11 +64,11 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderRabbits() {
+		const allRabbits = this.props.rabbits;
 		const rabbitsOnTab = this.getRabbits();
 		const rabbits = rabbitsOnTab.map(this.renderRabbit, this);
-		const unusedRabbits = this.props.rabbits.filter((unusedRabbit) => {
-			return rabbitsOnTab.map(rabbitOnTab => rabbitOnTab.id).indexOf(unusedRabbit.id) === -1;
-		});
+		const idsOfrabbitsOnTab = rabbitsOnTab.map(rabbitOnTab => rabbitOnTab.id);
+		const unusedRabbits = allRabbits.filter(unusedRabbit => idsOfrabbitsOnTab.indexOf(unusedRabbit.id) === -1);
 
 		return (
 			<div>
@@ -100,16 +100,19 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 
 TabEditor.propTypes = {
 	tabs: PropTypes.arrayOf(tabProps),
+	rabbits: PropTypes.arrayOf(rabbitProps),
 	match: PropTypes.shape({
 		params: PropTypes.shape({
 			id: PropTypes.string.isRequired,
 		}).isRequired,
 	}).isRequired,
+	getRabbits: PropTypes.func.isRequired,
 	getTab: PropTypes.func.isRequired,
 };
 
 TabEditor.defaultProps = {
 	tabs: [],
+	rabbits: [],
 };
 
 export default connect(TabEditor);
