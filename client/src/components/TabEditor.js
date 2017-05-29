@@ -10,6 +10,8 @@ import connect from '../connect';
 
 class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
 	componentWillMount() {
+		this.props.getRabbits();
+
 		if (!this.getItems().length) {
 			this.props.getTab(this.getTabId());
 		}
@@ -62,13 +64,17 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderRabbits() {
-		const rabbits = this.getRabbits().map(this.renderRabbit, this);
+		const rabbitsOnTab = this.getRabbits();
+		const rabbits = rabbitsOnTab.map(this.renderRabbit, this);
+		const unusedRabbits = this.props.rabbits.filter((unusedRabbit) => {
+			return rabbitsOnTab.map(rabbitOnTab => rabbitOnTab.id).indexOf(unusedRabbit.id) === -1;
+		});
 
 		return (
 			<div>
 				<h3>Rabbits:</h3>
 				{rabbits}
-				<RabbitAdder {...this.props} tabId={this.getTabId()} />
+				<RabbitAdder {...this.props} tabId={this.getTabId()} unusedRabbits={unusedRabbits} />
 			</div>
 		);
 	}

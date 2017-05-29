@@ -3,6 +3,12 @@ include Authenticatable
 
 before_action :authorize
 
+def index
+	user = current_user
+	rabbits = current_user.rabbits.sort_by(&:updated_at).reverse
+	render json: rabbits
+end
+
 def create
 	user = current_user
 	rabbit = Rabbit.new(name: params[:name], phone_number: params[:phone_number], email: params[:email])
@@ -48,13 +54,25 @@ def edit
 end
 
 # remove the rabbit from the tab (but not from the DB!)
+def add_to_tab
+	tab = Tab.find(params[:tab_id])
+	rabbit = Rabbit.find(params[:id])
+	tab.rabbits << rabbit
+	if tab.save!
+		render json: { rabbit: rabbit, tab_id: tab.id }
+	else
+		halt 400, rabbit.errors.to_json
+	end
+end
+
+# remove the rabbit from the tab (but not from the DB!)
 def remove_from_tab
 	tab = Tab.find(params[:tab_id])
 	rabbit = Rabbit.find(params[:id])
 	if tab && tab.rabbits.delete(rabbit.id)
 		render json: { id: rabbit.id, tab_id: tab.id }
 	else
-		halt 400, rabbit.errors.to_json
+		halt 400, tab.errors.to_json
 	end
 end
 

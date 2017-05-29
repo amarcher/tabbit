@@ -53,9 +53,23 @@ export function deleteItem(tabId, item) {
 	};
 }
 
+export function getRabbits() {
+	return {
+		type: 'RABBITS_FETCH_REQUESTED',
+	};
+}
+
 export function createRabbit(tabId, rabbit) {
 	return {
 		type: 'RABBIT_CREATE_REQUESTED',
+		tabId,
+		rabbit,
+	};
+}
+
+export function addRabbitToTab(tabId, rabbit) {
+	return {
+		type: 'RABBIT_ADD_REQUESTED',
 		tabId,
 		rabbit,
 	};
