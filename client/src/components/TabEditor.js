@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { tab as tabProps } from '../propTypes';
+import { tab as tabProps, rabbit as rabbitProps } from '../propTypes';
 import Item from './Item';
 import Rabbit from './Rabbit';
 import RabbitAdder from './RabbitAdder';
@@ -10,6 +10,8 @@ import connect from '../connect';
 
 class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
 	componentWillMount() {
+		this.props.getRabbits();
+
 		if (!this.getItems().length) {
 			this.props.getTab(this.getTabId());
 		}
@@ -62,13 +64,17 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderRabbits() {
-		const rabbits = this.getRabbits().map(this.renderRabbit, this);
+		const allRabbits = this.props.rabbits;
+		const rabbitsOnTab = this.getRabbits();
+		const rabbits = rabbitsOnTab.map(this.renderRabbit, this);
+		const idsOfrabbitsOnTab = rabbitsOnTab.map(rabbitOnTab => rabbitOnTab.id);
+		const unusedRabbits = allRabbits.filter(unusedRabbit => idsOfrabbitsOnTab.indexOf(unusedRabbit.id) === -1);
 
 		return (
 			<div>
 				<h3>Rabbits:</h3>
 				{rabbits}
-				<RabbitAdder {...this.props} tabId={this.getTabId()} />
+				<RabbitAdder {...this.props} tabId={this.getTabId()} unusedRabbits={unusedRabbits} />
 			</div>
 		);
 	}
@@ -94,16 +100,19 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 
 TabEditor.propTypes = {
 	tabs: PropTypes.arrayOf(tabProps),
+	rabbits: PropTypes.arrayOf(rabbitProps),
 	match: PropTypes.shape({
 		params: PropTypes.shape({
 			id: PropTypes.string.isRequired,
 		}).isRequired,
 	}).isRequired,
+	getRabbits: PropTypes.func.isRequired,
 	getTab: PropTypes.func.isRequired,
 };
 
 TabEditor.defaultProps = {
 	tabs: [],
+	rabbits: [],
 };
 
 export default connect(TabEditor);

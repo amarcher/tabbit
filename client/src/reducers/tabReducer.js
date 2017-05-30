@@ -47,6 +47,13 @@ export default function tabReducer(tabs = [], action) {
 			return upsert(newTab, tabs);
 		}
 
+		case 'RABBIT_ADD_SUCCEEDED': {
+			const tabToUpdate = tabs.find(tab => tab.id === action.tabId);
+			const newRabbits = upsert(action.rabbit, tabToUpdate.rabbits);
+			const newTab = { ...tabToUpdate, rabbits: newRabbits };
+			return upsert(newTab, tabs);
+		}
+
 		case 'RABBIT_REMOVE_SUCCEEDED': {
 			const tabToUpdate = tabs.find(tab => tab.id === action.tabId);
 			const rabbitToRemove = tabToUpdate.rabbits.find(rabbit => rabbit.id === action.rabbitId);

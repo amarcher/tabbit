@@ -15,7 +15,9 @@ class TabList extends Component {
 	}
 
 	componentWillMount() {
-		this.props.getTabs();
+		if (!this.props.tabs.length) {
+			this.props.getTabs();
+		}
 	}
 
 	componentWillUpdate(nextProps) {
