@@ -9,7 +9,11 @@ class Api::V1::ItemsController < ApplicationController
     if tab && tab.user_id == current_user.id
       item = Item.new(name: params['item']['name'], price: params['item']['price'], tab_id: tab_id)
       if item.save!
-        render json: item
+        render json: item, :include => {
+          :rabbits => {
+            :only => :id
+          }
+        }
       end
     end
   end
@@ -21,7 +25,11 @@ class Api::V1::ItemsController < ApplicationController
     if tab && tab.user_id == current_user.id
       item = Item.find(item_id)
       if item.destroy
-        render json: item
+        render json: item, :include => {
+          :rabbits => {
+            :only => :id
+          }
+        }
       end
     end
   end
