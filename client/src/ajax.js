@@ -29,9 +29,9 @@ const Ajax = {
 		}).then(resp => resp.json());
 	},
 
-	post(url, params = {}) {
+	post(url, params = {}, method = 'post') {
 		return fetch(url, {
-			method: 'post',
+			method,
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
@@ -42,15 +42,11 @@ const Ajax = {
 	},
 
 	destroy(url, params = {}) {
-		return fetch(url, {
-			method: 'delete',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-				Authorization: getAuthToken(),
-			},
-			body: JSON.stringify(params),
-		}).then(resp => resp.json());
+		return Ajax.post(url, params, 'delete');
+	},
+
+	put(url, params = {}) {
+		return Ajax.post(url, params, 'put');
 	},
 
 	getAuthToken,

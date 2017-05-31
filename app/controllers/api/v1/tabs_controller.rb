@@ -11,7 +11,16 @@ class Api::V1::TabsController < ApplicationController
 
   def show
     tab = Tab.includes(:rabbits).includes(:items).find(params[:id])
-    render json: tab, :include => [:items, :rabbits]
+    render json: tab, :include => {
+      :items => {
+        :include => {
+          :rabbits => {
+            :only => :id
+          }
+        }
+      },
+      :rabbits => {}
+    }
   end
 
   def create
@@ -25,7 +34,16 @@ class Api::V1::TabsController < ApplicationController
   def edit
     tab_id = params[:id]
     tab = Tab.includes(:rabbits).includes(:items).find(tab_id)
-    render json: tab
+    render json: tab, :include => {
+      :items => {
+        :include => {
+          :rabbits => {
+            :only => :id
+          }
+        }
+      },
+      :rabbits => {}
+    }
   end
 
   def update

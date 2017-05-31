@@ -21,10 +21,16 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 	render() {
 		const { name } = this.props.rabbit;
+		const { active, subtotal } = this.props;
+		const style = {
+			color: active ? 'blue' : 'initial',
+		};
 
 		return (
 			<div>
-				<span>{name}</span> - <span>0</span>
+				<button style={style} onClick={this.props.onClick}>
+					<span>{name}</span> - <span>{subtotal}</span>
+				</button>
 				<button onClick={this.onRemoveRabbitFromTabClick}>x</button>
 			</div>
 		);
@@ -35,4 +41,7 @@ Item.propTypes = {
 	rabbit: rabbitProp.isRequired,
 	tabId: PropTypes.number.isRequired,
 	removeRabbitFromTab: PropTypes.func.isRequired,
+	active: PropTypes.bool.isRequired,
+	subtotal: PropTypes.number.isRequired,
+	onClick: PropTypes.func.isRequired,
 };
