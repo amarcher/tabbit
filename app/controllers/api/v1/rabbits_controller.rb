@@ -67,8 +67,11 @@ end
 
 # remove the rabbit from the tab (but not from the DB!)
 def remove_from_tab
-	tab = Tab.find(params[:tab_id])
+	tab = Tab.includes(:items).find(params[:tab_id])
 	rabbit = Rabbit.find(params[:id])
+	tab.items.each do |item|
+		item.rabbits.delete(rabbit)
+	end
 	if tab && tab.rabbits.delete(rabbit.id)
 		render json: { id: rabbit.id, tab_id: tab.id }
 	else
