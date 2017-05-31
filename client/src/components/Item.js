@@ -24,7 +24,7 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 		return (
 			<div>
-				<span>{name}</span> - <span>{price}</span>
+				<button onClick={this.props.onClick}><span>{name}</span> - <span>{price}</span></button>
 				<button onClick={this.onItemDeleteClick}>x</button>
 			</div>
 		);
@@ -35,4 +35,5 @@ Item.propTypes = {
 	item: itemProp.isRequired,
 	tabId: PropTypes.number.isRequired,
 	deleteItem: PropTypes.func.isRequired,
+	onClick: PropTypes.func.isRequired,
 };

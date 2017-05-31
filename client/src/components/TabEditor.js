@@ -12,8 +12,32 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	componentWillMount() {
 		this.props.getRabbits();
 
+		this.state = {
+			activeRabbitId: undefined,
+		};
+
 		if (!this.getItems().length) {
 			this.props.getTab(this.getTabId());
+		}
+	}
+
+	onMakeRabbitActive(rabbitId) {
+		this.setState({
+			activeRabbitId: rabbitId,
+		});
+	}
+
+	onTagItem(item) {
+		const { activeRabbitId } = this.state;
+
+		if (!activeRabbitId) {
+			return;
+		}
+
+		if (item.rabbits && item.rabbits.map(rabbit => rabbit.id).indexOf(activeRabbitId) > -1) {
+			this.props.untagItem(this.getTabId(), item.id, activeRabbitId);
+		} else {
+			this.props.tagItem(this.getTabId(), item.id, activeRabbitId);
 		}
 	}
 
@@ -33,6 +57,15 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		return this.getTab().rabbits || [];
 	}
 
+	getSubtotal(rabbit) {
+		const rawSubtotal = this.getItems().reduce((total, item) => {
+			const rabbitTagged = (item.rabbits.map(rabbitOnItem => rabbitOnItem.id).indexOf(rabbit.id) > -1);
+			return rabbitTagged ? total + ((1.0 * item.price) / item.rabbits.length) : total;
+		}, 0);
+
+		return Math.round(100.0 * rawSubtotal) / 100;
+	}
+
 	renderItems() {
 		const items = this.getItems().map(this.renderItem, this);
 
@@ -46,7 +79,9 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderItem(item) {
-		return (<Item {...this.props} key={item.id} item={item} tabId={this.getTabId()} />);
+		const onTagItem = this.onTagItem.bind(this, item);
+
+		return (<Item {...this.props} key={item.id} item={item} tabId={this.getTabId()} onClick={onTagItem} />);
 	}
 
 	renderSubtotal() {
@@ -80,7 +115,22 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	renderRabbit(rabbit) {
-		return (<Rabbit {...this.props} key={rabbit.id} rabbit={rabbit} tabId={this.getTabId()} tab={this.getTab()} />);
+		const active = this.state.activeRabbitId === rabbit.id;
+		const onMakeRabbitActive = this.onMakeRabbitActive.bind(this, rabbit.id);
+		const subtotal = this.getSubtotal(rabbit);
+
+		return (
+			<Rabbit
+				{...this.props}
+				key={rabbit.id}
+				rabbit={rabbit}
+				tabId={this.getTabId()}
+				tab={this.getTab()}
+				active={active}
+				subtotal={subtotal}
+				onClick={onMakeRabbitActive}
+			/>
+		);
 	}
 
 	render() {
@@ -108,6 +158,8 @@ TabEditor.propTypes = {
 	}).isRequired,
 	getRabbits: PropTypes.func.isRequired,
 	getTab: PropTypes.func.isRequired,
+	tagItem: PropTypes.func.isRequired,
+	untagItem: PropTypes.func.isRequired,
 };
 
 TabEditor.defaultProps = {

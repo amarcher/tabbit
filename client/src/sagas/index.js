@@ -191,6 +191,59 @@ function* deleteItem(action) {
 	}
 }
 
+function* tagItem(action) {
+	try {
+		const resp = yield call(ajax.put.bind(undefined, `/api/v1/tabs/${action.tabId}/items/${action.itemId}`, {
+			rabbit_id: action.rabbitId,
+		}));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'ITEM_TAG_SUCCEEDED',
+			item: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'ITEM_TAG_FAILED',
+			message: e.message,
+		});
+	}
+}
+
+function* untagItem(action) {
+	try {
+		const resp = yield call(ajax.put.bind(undefined, `/api/v1/tabs/${action.tabId}/items/${action.itemId}`, {
+			rabbit_id: action.rabbitId,
+			remove: true,
+		}));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'ITEM_UNTAG_SUCCEEDED',
+			item: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'ITEM_UNTAG_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* getRabbits() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/rabbits'));
@@ -304,6 +357,8 @@ function* saga() {
 	yield takeEvery('USER_CREATE_REQUESTED', createUser);
 	yield takeEvery('ITEM_CREATE_REQUESTED', createItem);
 	yield takeEvery('ITEM_DELETE_REQUESTED', deleteItem);
+	yield takeEvery('ITEM_TAG_REQUESTED', tagItem);
+	yield takeEvery('ITEM_UNTAG_REQUESTED', untagItem);
 	yield takeEvery('RABBITS_FETCH_REQUESTED', getRabbits);
 	yield takeEvery('RABBIT_CREATE_REQUESTED', createRabbit);
 	yield takeEvery('RABBIT_ADD_REQUESTED', addRabbitToTab);

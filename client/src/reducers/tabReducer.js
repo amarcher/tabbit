@@ -33,7 +33,9 @@ export default function tabReducer(tabs = [], action) {
 		case 'TAB_FETCH_SUCCEEDED':
 			return upsert(action.tab, tabs);
 
-		case 'ITEM_CREATE_SUCCEEDED': {
+		case 'ITEM_CREATE_SUCCEEDED':
+		case 'ITEM_TAG_SUCCEEDED':
+		case 'ITEM_UNTAG_SUCCEEDED': {
 			const tabToUpdate = tabs.find(tab => tab.id === action.item.tab_id);
 			const newItems = upsert(action.item, tabToUpdate.items);
 			const newTab = { ...tabToUpdate, items: newItems };

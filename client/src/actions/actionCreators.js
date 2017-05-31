@@ -53,6 +53,24 @@ export function deleteItem(tabId, item) {
 	};
 }
 
+export function tagItem(tabId, itemId, rabbitId) {
+	return {
+		type: 'ITEM_TAG_REQUESTED',
+		tabId,
+		itemId,
+		rabbitId,
+	};
+}
+
+export function untagItem(tabId, itemId, rabbitId) {
+	return {
+		type: 'ITEM_UNTAG_REQUESTED',
+		tabId,
+		itemId,
+		rabbitId,
+	};
+}
+
 export function getRabbits() {
 	return {
 		type: 'RABBITS_FETCH_REQUESTED',
