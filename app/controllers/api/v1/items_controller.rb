@@ -7,7 +7,7 @@ class Api::V1::ItemsController < ApplicationController
     tab_id = params['tab_id']
     tab = Tab.find(tab_id)
     if tab && tab.user_id == current_user.id
-      item = Item.new(name: params['item']['name'], price: params['item']['price'], tab_id: tab_id)
+      item = Item.new(name: params['item']['name'], price: params['item']['price'].to_f, tab_id: tab_id)
       if item.save!
         render json: item, :include => {
           :rabbits => {

@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141115090600) do
+ActiveRecord::Schema.define(version: 20170601162842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "items", force: :cascade do |t|
     t.string   "name"
-    t.integer  "price"
+    t.decimal  "price",      precision: 256, scale: 2
     t.integer  "tab_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20141115090600) do
 
   create_table "tabs", force: :cascade do |t|
     t.string   "name",       default: "Untitled Tab"
-    t.date     "dine_date",  default: '2017-05-21'
+    t.date     "dine_date",  default: '2017-05-15'
     t.text     "raw_text"
     t.string   "url"
     t.string   "img_url"

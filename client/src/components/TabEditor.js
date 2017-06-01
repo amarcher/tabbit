@@ -7,6 +7,7 @@ import Rabbit from './Rabbit';
 import RabbitAdder from './RabbitAdder';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
+import { formatDollar } from '../utils';
 
 const DEFAULT_TAX = 0.0875;
 const DEFAULT_TIP = 0.18;
@@ -63,7 +64,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 	}
 
 	getTabSubtotal() {
-		return this.getItems().reduce((total, item) => total + item.price, 0);
+		return this.getItems().reduce((total, item) => total + parseFloat(item.price, 10), 0);
 	}
 
 	getSubtotal(rabbit) {
@@ -71,7 +72,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 
 		const rawSubtotal = this.getItems().reduce((total, item) => {
 			const rabbitTagged = (item.rabbits.map(rabbitOnItem => rabbitOnItem.id).indexOf(rabbit.id) > -1);
-			return rabbitTagged ? total + ((1.0 * item.price) / item.rabbits.length) : total;
+			return rabbitTagged ? total + ((1.0 * parseFloat(item.price)) / item.rabbits.length) : total;
 		}, 0);
 
 		return Math.round(100.0 * (1.0 + tax + tip) * rawSubtotal) / 100;
@@ -113,14 +114,14 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 			const subtotal = Math.round(100.0 * rawSubtotal) / 100;
 			const tax = Math.round(100.0 * rawSubtotal * this.state.tax) / 100;
 			const tip = Math.round(100.0 * rawSubtotal * this.state.tip) / 100;
-			const total = rawSubtotal + tax + tip;
+			const total = Math.round(100 * (rawSubtotal + tax + tip)) / 100;
 
 			return (
 				<div>
-					<div>Subtotal: {subtotal}</div>
-					<div>Tax: {tax}</div>
-					<div>Tip: {tip}</div>
-					<div>Total: {total}</div>
+					<div>Subtotal: {formatDollar(subtotal)}</div>
+					<div>Tax: {formatDollar(tax)}</div>
+					<div>Tip: {formatDollar(tip)}</div>
+					<div>Total: {formatDollar(total)}</div>
 				</div>
 			);
 		}
