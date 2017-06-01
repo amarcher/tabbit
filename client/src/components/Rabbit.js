@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { rabbit as rabbitProp } from '../propTypes';
+import { formatDollar } from '../utils';
 
 export default class Item extends Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -29,7 +30,7 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 		return (
 			<div>
 				<button style={style} onClick={this.props.onClick}>
-					<span>{name}</span> - <span>{subtotal}</span>
+					<span>{name}</span> - <span>{formatDollar(subtotal)}</span>
 				</button>
 				<button onClick={this.onRemoveRabbitFromTabClick}>x</button>
 			</div>

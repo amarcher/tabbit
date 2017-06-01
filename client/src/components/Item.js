@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { item as itemProp, rabbit as rabbitProp } from '../propTypes';
+import { formatDollar } from '../utils';
 
 export default class Item extends Component { // eslint-disable-line react/prefer-stateless-function
 	constructor(props) {
@@ -22,12 +23,14 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 	renderRabbits() {
 		const { rabbitOwners } = this.props;
 
-		return rabbitOwners.map((rabbit) => {
-			const name = (rabbit.name || 'U').toUpperCase().charAt(0);
-			return (
-				<span>{name}</span>
-			);
-		});
+		return rabbitOwners.map(this.renderRabbit, this);
+	}
+
+	renderRabbit(rabbit) { // eslint-disable-line class-methods-use-this
+		const name = (rabbit.name || 'U').toUpperCase().charAt(0);
+		return (
+			<span key={rabbit.id}>{name}</span>
+		);
 	}
 
 	render() {
@@ -36,7 +39,7 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 		return (
 			<div>
 				<button onClick={this.props.onClick}>
-					<span>{name}</span> - <span>{price}</span>
+					<span>{name}</span> - <span>{formatDollar(price)}</span>
 				</button>
 				{this.renderRabbits()}
 				<button onClick={this.onItemDeleteClick}>x</button>

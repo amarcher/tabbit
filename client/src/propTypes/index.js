@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 export const item = PropTypes.shape({
 	id: PropTypes.number.isRequired,
 	name: PropTypes.string,
-	price: PropTypes.number,
+	price: PropTypes.string,
 	tab: PropTypes.number,
 });
 
