@@ -8,12 +8,17 @@ import RabbitAdder from './RabbitAdder';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 
+const DEFAULT_TAX = 0.0875;
+const DEFAULT_TIP = 0.18;
+
 class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
 	componentWillMount() {
 		this.props.getRabbits();
 
 		this.state = {
 			activeRabbitId: undefined,
+			tax: DEFAULT_TAX,
+			tip: DEFAULT_TIP,
 		};
 
 		if (!this.getItems().length) {
@@ -57,13 +62,19 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		return this.getTab().rabbits || [];
 	}
 
+	getTabSubtotal() {
+		return this.getItems().reduce((total, item) => total + item.price, 0);
+	}
+
 	getSubtotal(rabbit) {
+		const { tax, tip } = this.state;
+
 		const rawSubtotal = this.getItems().reduce((total, item) => {
 			const rabbitTagged = (item.rabbits.map(rabbitOnItem => rabbitOnItem.id).indexOf(rabbit.id) > -1);
 			return rabbitTagged ? total + ((1.0 * item.price) / item.rabbits.length) : total;
 		}, 0);
 
-		return Math.round(100.0 * rawSubtotal) / 100;
+		return Math.round(100.0 * (1.0 + tax + tip) * rawSubtotal) / 100;
 	}
 
 	renderItems() {
@@ -95,13 +106,21 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		);
 	}
 
-	renderSubtotal() {
-		const subtotal = this.getItems().reduce((total, item) => total + item.price, 0);
+	renderSubtotalTaxAndTip() {
+		const rawSubtotal = this.getTabSubtotal();
 
-		if (subtotal) {
+		if (rawSubtotal) {
+			const subtotal = Math.round(100.0 * rawSubtotal) / 100;
+			const tax = Math.round(100.0 * rawSubtotal * this.state.tax) / 100;
+			const tip = Math.round(100.0 * rawSubtotal * this.state.tip) / 100;
+			const total = rawSubtotal + tax + tip;
+
 			return (
 				<div>
-					Subtotal: {subtotal}
+					<div>Subtotal: {subtotal}</div>
+					<div>Tax: {tax}</div>
+					<div>Tip: {tip}</div>
+					<div>Total: {total}</div>
 				</div>
 			);
 		}
@@ -150,7 +169,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		return (
 			<div>
 				<h2>{name}</h2>
-				{this.renderSubtotal()}
+				{this.renderSubtotalTaxAndTip()}
 				{this.renderItems()}
 				{this.renderRabbits()}
 				<Link to="/tabs">All Tabs</Link>
