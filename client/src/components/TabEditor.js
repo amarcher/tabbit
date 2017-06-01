@@ -80,8 +80,19 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 
 	renderItem(item) {
 		const onTagItem = this.onTagItem.bind(this, item);
+		const rabbitIds = item.rabbits.map(rabbit => rabbit.id);
+		const rabbitOwners = this.getRabbits().filter(rabbit => rabbitIds.indexOf(rabbit.id) > -1);
 
-		return (<Item {...this.props} key={item.id} item={item} tabId={this.getTabId()} onClick={onTagItem} />);
+		return (
+			<Item
+				{...this.props}
+				key={item.id}
+				item={item}
+				tabId={this.getTabId()}
+				onClick={onTagItem}
+				rabbitOwners={rabbitOwners}
+			/>
+		);
 	}
 
 	renderSubtotal() {

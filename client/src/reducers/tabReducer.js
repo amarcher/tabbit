@@ -60,9 +60,10 @@ export default function tabReducer(tabs = [], action) {
 			const tabToUpdate = tabs.find(tab => tab.id === action.tabId);
 			const rabbitToRemove = tabToUpdate.rabbits.find(rabbit => rabbit.id === action.rabbitId);
 			const newRabbits = remove(rabbitToRemove, tabToUpdate.rabbits);
-			const newItems = tabToUpdate.items.map((item) => {
-				return { ...item, rabbits: remove(rabbitToRemove, item.rabbits) };
-			});
+			const newItems = tabToUpdate.items.map(item => ({
+				...item,
+				rabbits: remove(rabbitToRemove, item.rabbits),
+			}));
 			const newTab = { ...tabToUpdate, rabbits: newRabbits, items: newItems };
 			return upsert(newTab, tabs);
 		}
