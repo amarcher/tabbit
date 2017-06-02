@@ -82,6 +82,30 @@ function* createTab() {
 	}
 }
 
+function* updateTab(action) {
+	try {
+		const resp = yield call(ajax.put.bind(undefined, `/api/v1/tabs/${action.tabId}`, action.changedTabProps));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'TAB_UPDATE_SUCCEEDED',
+			tab: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'TAB_UPDATE_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* login(action) {
 	try {
 		const resp = yield call(Auth.login.bind(undefined, action.credentials));
@@ -352,6 +376,7 @@ function* saga() {
 	yield takeEvery('TABS_FETCH_REQUESTED', getTabs);
 	yield takeEvery('TAB_FETCH_REQUESTED', getTab);
 	yield takeEvery('TAB_CREATE_REQUESTED', createTab);
+	yield takeEvery('TAB_UPDATE_REQUESTED', updateTab);
 	yield takeEvery('LOGIN_REQUESTED', login);
 	yield takeEvery('LOGOUT_REQUESTED', logout);
 	yield takeEvery('USER_CREATE_REQUESTED', createUser);

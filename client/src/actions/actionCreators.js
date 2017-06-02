@@ -17,6 +17,14 @@ export function createTab() {
 	};
 }
 
+export function updateTab(tabId, changedTabProps) {
+	return {
+		type: 'TAB_UPDATE_REQUESTED',
+		tabId,
+		changedTabProps,
+	};
+}
+
 export function login(credentials) {
 	return {
 		type: 'LOGIN_REQUESTED',

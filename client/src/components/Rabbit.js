@@ -20,6 +20,18 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 		this.onRemoveRabbitFromTabClick = this.onRemoveRabbitFromTabClick.bind(this);
 	}
 
+	renderTotal() {
+		const { total } = this.props;
+
+		if (total) {
+			return (
+				<span> ({formatDollar(total)})</span>
+			);
+		}
+
+		return '';
+	}
+
 	render() {
 		const { name } = this.props.rabbit;
 		const { active, subtotal } = this.props;
@@ -31,6 +43,7 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 			<div>
 				<button style={style} onClick={this.props.onClick}>
 					<span>{name}</span> - <span>{formatDollar(subtotal)}</span>
+					{this.renderTotal()}
 				</button>
 				<button onClick={this.onRemoveRabbitFromTabClick}>x</button>
 			</div>
@@ -44,5 +57,6 @@ Item.propTypes = {
 	removeRabbitFromTab: PropTypes.func.isRequired,
 	active: PropTypes.bool.isRequired,
 	subtotal: PropTypes.number.isRequired,
+	total: PropTypes.number.isRequired,
 	onClick: PropTypes.func.isRequired,
 };
