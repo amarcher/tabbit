@@ -47,22 +47,31 @@ class Api::V1::TabsController < ApplicationController
   end
 
   def update
-    tab_id = params[:id]
-    updated_items = params[:items]
-    updated_tab = params[:tab]
+    tab = current_user.tabs.find(params[:id])
 
-    tab = Tab.includes(:items).find(tab_id)
-    tab.update(name: updated_tab[:name])
-
-    items = updated_items.map do |updated_item|
-      updatedItem = updated_item.last
-      item = Item.find(updated_item[:id])
-      item.update(name: updated_item[:name], price: updated_item[:price])
-      item
+    if !tab
+      render json: "Unauthorized", status: 400
     end
 
-    render json: { tab: tab, items: items }
+    tab.update_attributes!(tab_params)
+
+    render json: tab, :include => {
+      :items => {
+        :include => {
+          :rabbits => {
+            :only => :id
+          }
+        }
+      },
+      :rabbits => {}
+    }
   end
+
+  private
+
+    def tab_params
+      params.require(:tab).permit(:name, :items, :rabbits, :tax_rate, :tip_rate, :dine_date, :text)
+    end
 end
 
 # def index
