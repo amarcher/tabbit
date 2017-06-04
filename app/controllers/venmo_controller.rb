@@ -6,13 +6,6 @@ class VenmoController < ApplicationController
 		redirect_to url
 	end
 
-	def remove_venmo
-		current_user.vm_authtoken = nil
-		current_user.vm_authrefreshtoken = nil
-		current_user.save
-		render json: { ok: true }, status: 200
-	end
-
 	def venmo_webhook
 		url = 'https://api.venmo.com/v1/oauth/access_token'
 		res = HTTParty.post(url, body: { "client_id" => ENV['VENMOID'], "client_secret" => ENV['VENMOSECRET'], "code" => params[:code] })

@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 	get '/venmo/:user_id/', to: 'venmo#venmo_webhook'
-	delete 'user/venmo', to: 'venmo#remove_venmo'
 
 	namespace :api do
 		namespace :v1 do
@@ -12,6 +11,7 @@ Rails.application.routes.draw do
 			end
 			resources :rabbits, only: [:create, :update, :edit, :destroy, :index]
 			post 'user/create', to: 'users#create'
+			delete 'user/venmo', to: 'users#remove_venmo'
 			get 'user', to: 'users#show'
 			resources :sessions, only: [:create, :destroy]
 		end

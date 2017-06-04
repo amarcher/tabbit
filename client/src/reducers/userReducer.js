@@ -3,6 +3,7 @@ export default function userReducer(user = {}, action) {
 		case 'LOGIN_SUCCEEDED':
 		case 'USER_CREATE_SUCCEEDED':
 		case 'USER_FETCH_SUCCEEDED':
+		case 'VENMO_UNLINK_SUCCEEDED':
 			return action.user;
 
 		default:

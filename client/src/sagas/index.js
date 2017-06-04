@@ -425,6 +425,30 @@ function* chargeRabbit(action) {
 	}
 }
 
+function* unlinkVenmo() {
+	try {
+		const resp = yield call(ajax.destroy.bind(undefined, '/api/v1/user/venmo'));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'VENMO_UNLINK_SUCCEEDED',
+			user: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'VENMO_UNLINK_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* saga() {
 	yield takeEvery('USER_FETCH_REQUESTED', getUser);
 	yield takeEvery('TABS_FETCH_REQUESTED', getTabs);
@@ -443,6 +467,7 @@ function* saga() {
 	yield takeEvery('RABBIT_ADD_REQUESTED', addRabbitToTab);
 	yield takeEvery('RABBIT_REMOVE_REQUESTED', removeRabbitFromTab);
 	yield takeEvery('VENMO_CHARGE_RABBIT_REQUESTED', chargeRabbit);
+	yield takeEvery('VENMO_UNLINK_REQUESTED', unlinkVenmo);
 }
 
 export default saga;

@@ -26,11 +26,19 @@ class Header extends Component {
 	renderLinkVenmo() {
 		const { user, authorized } = this.props;
 
-		if (authorized && !user.vm_authtoken) {
+		if (authorized) {
+			if (!user.vm_authtoken) {
+				return (
+					<button type="button" onClick={this.onLinkVenmo}>
+						Link Venmo
+					</button>
+				);
+			}
+
 			return (
-				<button type="button" onClick={this.onLinkVenmo}>
-					Link Venmo
-				</button>
+				<button type="button" onClick={this.props.unlinkVenmo}>
+						Unlink Venmo
+					</button>
 			);
 		}
 
@@ -64,6 +72,7 @@ Header.propTypes = {
 	getUser: PropTypes.func.isRequired,
 	userFetchSucceeded: PropTypes.func.isRequired,
 	logout: PropTypes.func.isRequired,
+	unlinkVenmo: PropTypes.func.isRequired,
 	user: userProp.isRequired,
 };
 

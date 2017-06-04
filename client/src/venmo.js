@@ -15,6 +15,7 @@ function checkForToken(callback, event) {
 
 	if (user && user.vm_authtoken) {
 		popUp.close();
+		window.removeEventListener('message', checkForToken);
 		callback(user);
 	}
 }

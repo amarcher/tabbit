@@ -47,8 +47,8 @@ class Api::V1::UsersController < ApplicationController
   def remove_venmo
     current_user.vm_authtoken = nil
     current_user.vm_authrefreshtoken = nil
-    current_user.save
-    render json: { ok: true }, status: 200
+    current_user.save!
+    render json: current_user, only: [:id, :auth_token, :vm_authtoken]
   end
 
   def venmo_webhook

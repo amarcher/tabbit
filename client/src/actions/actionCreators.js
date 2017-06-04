@@ -130,3 +130,9 @@ export function chargeRabbit(tabId, rabbitId, amount) {
 		amount,
 	};
 }
+
+export function unlinkVenmo() {
+	return {
+		type: 'VENMO_UNLINK_REQUESTED',
+	};
+}
