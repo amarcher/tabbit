@@ -160,31 +160,8 @@ end
 # # 	p request.body
 # # end
 
-# def add_venmo
-# 	url = "https://api.venmo.com/v1/oauth/authorize?client_id=#{ENV['VENMOID']}&scope=make_payments&response_type=code&redirect_uri=http://www.tabbitrabbit.com/venmo/#{current_user.id}/"
-# 	redirect url
 # end
 
-
-# def remove_venmo
-# 	@user = current_user
-# 	@user.vm_authtoken = nil
-# 	@user.vm_authrefreshtoken = nil
-# 	@user.save
-# 	redirect :index
-# end
-
-# end
-
-# get '/venmo/:user_id/' do
-# 	url = 'https://api.venmo.com/v1/oauth/access_token'
-# 	res = HTTParty.post(url, body: { "client_id" => ENV['VENMOID'], "client_secret" => ENV['VENMOSECRET'], "code" => params[:code] })
-# 	@user = User.find(params[:user_id])
-# 	@user.vm_authtoken = res['access_token']
-# 	@user.vm_authrefreshtoken = res['refresh_token']
-# 	@user.save
-# 	redirect '/'
-# end
 
 # post '/venmo' do
 # 	p request
