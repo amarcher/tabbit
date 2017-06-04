@@ -4,6 +4,13 @@ export function getUser() {
 	};
 }
 
+export function userFetchSucceeded(user) {
+	return {
+		type: 'USER_FETCH_SUCCEEDED',
+		user,
+	};
+}
+
 export function getTabs() {
 	return {
 		type: 'TABS_FETCH_REQUESTED',

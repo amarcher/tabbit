@@ -20,14 +20,9 @@ class VenmoController < ApplicationController
 		user.vm_authtoken = res['access_token']
 		user.vm_authrefreshtoken = res['refresh_token']
 		if user.save!
-			p 'rendering template'
-			render html: '<script type="text/javascript">'\
-					'window.opener.postMessage("success", "*");'\
-				'</script>'.html_safe
-			return
+			render html: "<script type='text/javascript'>"\
+					"window.opener.postMessage('#{user.to_json( only: [:id, :vm_authtoken, :auth_token])}', '*');"\
+				"</script>".html_safe
 		end
-
-		p 'otherwise rendering template'
-		render template: 'venmo/venmo_success'
 	end
 end

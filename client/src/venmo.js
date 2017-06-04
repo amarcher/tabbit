@@ -11,9 +11,11 @@ const POPUP_PARAMS = 'menubar=no,location=no,resizable=no,scrollbars=no,status=n
 let popUp;
 
 function checkForToken(callback, event) {
-	if (event.data === 'success') {
+	const user = event.data && JSON.parse(event.data);
+
+	if (user && user.vm_authtoken) {
 		popUp.close();
-		callback();
+		callback(user);
 	}
 }
 
