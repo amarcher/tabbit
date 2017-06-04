@@ -7,7 +7,7 @@ class Api::V1::SessionsController < ApplicationController
     if user && user.password == user_password
       user.generate_authentication_token!
       user.save!
-      render json: user, status: 200
+      render json: user, only: [:id, :vm_authtoken, :auth_token]
     else
       render json: { errors: "Invalid email or password" }, status: 422
     end

@@ -44,7 +44,10 @@ GEM
     byebug (9.0.6)
     concurrent-ruby (1.0.5)
     diff-lcs (1.3)
-    dotenv (2.2.0)
+    dotenv (2.2.1)
+    dotenv-rails (2.2.1)
+      dotenv (= 2.2.1)
+      railties (>= 3.2, < 5.2)
     erubis (2.7.0)
     ffi (1.9.18)
     foreman (0.82.0)
@@ -153,7 +156,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   byebug
-  dotenv
+  dotenv-rails
   foreman (~> 0.82.0)
   httparty
   listen (~> 3.0.5)

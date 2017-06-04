@@ -81,11 +81,51 @@ end
 
 # remove the rabbit entirely
 def destroy
-	rabbit = Tab.find(params[:rabbit_id])
+	rabbit = Rabbit.find(params[:rabbit_id])
 	if rabbit.destroy
 		render json: { id: rabbit.id }
 	else
 		halt 400, rabbit.errors.to_json
+	end
+end
+
+def charge_rabbit
+	tab = current_user.tabs.find(params[:tab_id])
+	if tab
+		rabbit = tab.rabbits.find(params[:id])
+		if rabbit
+			res = charge({
+				phone: rabbit.phone_number,
+				note: tab.name,
+				amount: params[:amount] || amount_for_rabbit(tab, rabbit),
+				auth_token: current_user.vm_authtoken
+			})
+
+			if res
+				render json: { ok: true }
+			end
+		end
+	end
+end
+
+private
+
+def charge(args)
+	url = 'https://api.venmo.com/v1/payments'
+	HTTParty.post(url, body: {
+		"client_id" => ENV['VENMOID'],
+		"client_secret" => ENV['VENMOSECRET'],
+		"phone" => args[:phone],
+		"note" => args[:note],
+		"amount" => "-#{args[:amount]}",
+		"audience" => "public",
+		"access_token" => args[:auth_token]
+	})
+end
+
+def amount_for_rabbit(tab, rabbit)
+	tab.items.inject do |total, item|
+		total + (1.0 * item.price) / (1.0 * item.rabbits.length)
 	end
 end
 

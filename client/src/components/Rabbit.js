@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { rabbit as rabbitProp } from '../propTypes';
+import { rabbit as rabbitProp, user as userProp } from '../propTypes';
 import { formatDollar } from '../utils';
 
 export default class Item extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -16,8 +16,29 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 		this.props.removeRabbitFromTab(tabId, rabbit);
 	}
 
+	onChargeRabbit() {
+		const { tabId, rabbit, total } = this.props;
+
+		this.props.chargeRabbit(tabId, rabbit.id, total);
+	}
+
 	bindEventHandlers() {
 		this.onRemoveRabbitFromTabClick = this.onRemoveRabbitFromTabClick.bind(this);
+		this.onChargeRabbit = this.onChargeRabbit.bind(this);
+	}
+
+	renderChargeRabbit() {
+		const { user, total } = this.props;
+
+		if (user.vm_authtoken && total) {
+			return (
+				<button onClick={this.onChargeRabbit}>
+					Charge
+				</button>
+			);
+		}
+
+		return '';
 	}
 
 	renderTotal() {
@@ -46,12 +67,14 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 					{this.renderTotal()}
 				</button>
 				<button onClick={this.onRemoveRabbitFromTabClick}>x</button>
+				{this.renderChargeRabbit()}
 			</div>
 		);
 	}
 }
 
 Item.propTypes = {
+	user: userProp.isRequired,
 	rabbit: rabbitProp.isRequired,
 	tabId: PropTypes.number.isRequired,
 	removeRabbitFromTab: PropTypes.func.isRequired,
@@ -59,4 +82,5 @@ Item.propTypes = {
 	subtotal: PropTypes.number.isRequired,
 	total: PropTypes.number.isRequired,
 	onClick: PropTypes.func.isRequired,
+	chargeRabbit: PropTypes.func.isRequired,
 };

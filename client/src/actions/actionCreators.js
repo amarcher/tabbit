@@ -1,3 +1,9 @@
+export function getUser() {
+	return {
+		type: 'USER_FETCH_REQUESTED',
+	};
+}
+
 export function getTabs() {
 	return {
 		type: 'TABS_FETCH_REQUESTED',
@@ -109,3 +115,11 @@ export function removeRabbitFromTab(tabId, rabbit) {
 	};
 }
 
+export function chargeRabbit(tabId, rabbitId, amount) {
+	return {
+		type: 'VENMO_CHARGE_RABBIT_REQUESTED',
+		tabId,
+		rabbitId,
+		amount,
+	};
+}

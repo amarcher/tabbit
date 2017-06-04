@@ -10,6 +10,30 @@ function isUnauthorized(resp) {
 	return hasUnauthorizedStatus || hasUnauthorizedError;
 }
 
+function* getUser() {
+	try {
+		const resp = yield call(ajax.get.bind(undefined, '/api/v1/user'));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'USER_FETCH_SUCCEEDED',
+			user: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'USER_FETCH_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* getTabs() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/tabs'));
@@ -120,6 +144,7 @@ function* login(action) {
 
 		yield put({
 			type: 'LOGIN_SUCCEEDED',
+			user: resp,
 		});
 	} catch (e) {
 		yield put({
@@ -158,6 +183,7 @@ function* createUser(action) {
 
 		yield put({
 			type: 'USER_CREATE_SUCCEEDED',
+			user: resp,
 		});
 	} catch (e) {
 		yield put({
@@ -372,7 +398,35 @@ function* removeRabbitFromTab(action) {
 	}
 }
 
+function* chargeRabbit(action) {
+	try {
+		const url = `/api/v1/tabs/${action.tabId}/rabbits/${action.rabbitId}/charge`;
+		const resp = yield call(ajax.post.bind(undefined, url, {
+			amount: action.amount,
+		}));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'VENMO_CHARGE_RABBIT_SUCCEEDED',
+			tabs: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'VENMO_CHARGE_RABBIT_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* saga() {
+	yield takeEvery('USER_FETCH_REQUESTED', getUser);
 	yield takeEvery('TABS_FETCH_REQUESTED', getTabs);
 	yield takeEvery('TAB_FETCH_REQUESTED', getTab);
 	yield takeEvery('TAB_CREATE_REQUESTED', createTab);
@@ -388,6 +442,7 @@ function* saga() {
 	yield takeEvery('RABBIT_CREATE_REQUESTED', createRabbit);
 	yield takeEvery('RABBIT_ADD_REQUESTED', addRabbitToTab);
 	yield takeEvery('RABBIT_REMOVE_REQUESTED', removeRabbitFromTab);
+	yield takeEvery('VENMO_CHARGE_RABBIT_REQUESTED', chargeRabbit);
 }
 
 export default saga;

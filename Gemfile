@@ -28,7 +28,6 @@ gem 'foreman', '~> 0.82.0'
 gem 'rack-cors'
 
 gem 'httparty'
-gem 'dotenv'
 gem 'twilio-ruby'
 
 group :development, :test do
@@ -36,6 +35,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'byebug', platform: :mri
   gem 'rake'
+  gem 'dotenv-rails'
 end
 
 group :development do

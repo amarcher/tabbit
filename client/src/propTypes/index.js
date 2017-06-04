@@ -24,3 +24,9 @@ export const tab = PropTypes.shape({
 	img_url: PropTypes.string,
 	user: PropTypes.number,
 });
+
+export const user = PropTypes.shape({
+	id: PropTypes.number,
+	auth_token: PropTypes.string,
+	vm_authtoken: PropTypes.string,
+});
