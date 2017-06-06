@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import connect from '../connect';
@@ -57,7 +58,7 @@ class Login extends Component {
 						onChange={this.onFieldChange}
 					/>
 
-					<button type="submit">Login</button>
+					<Button type="submit">Login</Button>
 				</form>
 
 				<Link to="/signup">Sign Up</Link>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { rabbit as rabbitProp, user as userProp } from '../propTypes';
 import { formatDollar } from '../utils';
@@ -32,9 +33,9 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 		if (user.vm_authtoken && total) {
 			return (
-				<button onClick={this.onChargeRabbit}>
+				<Button onClick={this.onChargeRabbit}>
 					Charge
-				</button>
+				</Button>
 			);
 		}
 
@@ -56,17 +57,14 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 	render() {
 		const { name } = this.props.rabbit;
 		const { active, subtotal } = this.props;
-		const style = {
-			color: active ? 'blue' : 'initial',
-		};
 
 		return (
 			<div>
-				<button style={style} onClick={this.props.onClick}>
+				<Button active={active} onClick={this.props.onClick}>
 					<span>{name}</span> - <span>{formatDollar(subtotal)}</span>
 					{this.renderTotal()}
-				</button>
-				<button onClick={this.onRemoveRabbitFromTabClick}>x</button>
+				</Button>
+				<Button onClick={this.onRemoveRabbitFromTabClick}>x</Button>
 				{this.renderChargeRabbit()}
 			</div>
 		);

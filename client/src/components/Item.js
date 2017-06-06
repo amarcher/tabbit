@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { item as itemProp, rabbit as rabbitProp } from '../propTypes';
 import { formatDollar } from '../utils';
@@ -26,10 +27,13 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 		return rabbitOwners.map(this.renderRabbit, this);
 	}
 
-	renderRabbit(rabbit) { // eslint-disable-line class-methods-use-this
+	renderRabbit(rabbit) {
+		const onMakeRabbitActive = () => this.props.onMakeRabbitActive(rabbit.id);
+		const active = this.props.activeRabbitId === rabbit.id;
 		const name = (rabbit.name || 'U').toUpperCase().charAt(0);
+
 		return (
-			<span key={rabbit.id}>{name}</span>
+			<Button onClick={onMakeRabbitActive} active={active}>{name}</Button>
 		);
 	}
 
@@ -38,11 +42,11 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 		return (
 			<div>
-				<button onClick={this.props.onClick}>
+				<Button onClick={this.props.onClick}>
 					<span>{name}</span> - <span>{formatDollar(price)}</span>
-				</button>
+				</Button>
 				{this.renderRabbits()}
-				<button onClick={this.onItemDeleteClick}>x</button>
+				<Button onClick={this.onItemDeleteClick}>x</Button>
 			</div>
 		);
 	}
@@ -50,8 +54,10 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 Item.propTypes = {
 	item: itemProp.isRequired,
+	activeRabbitId: PropTypes.number.isRequired,
 	rabbitOwners: PropTypes.arrayOf(rabbitProp).isRequired,
 	tabId: PropTypes.number.isRequired,
 	deleteItem: PropTypes.func.isRequired,
 	onClick: PropTypes.func.isRequired,
+	onMakeRabbitActive: PropTypes.func.isRequired,
 };

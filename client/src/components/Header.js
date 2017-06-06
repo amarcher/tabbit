@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { user as userProp } from '../propTypes';
+import { user as userProp, rabbit as rabbitProp } from '../propTypes';
 import connect from '../connect';
 import { authVenmo } from '../venmo';
 
@@ -14,6 +15,10 @@ class Header extends Component {
 	componentWillMount() {
 		if (!this.props.user.id) {
 			this.props.getUser();
+		}
+
+		if (!this.props.rabbits) {
+			this.props.getRabbits();
 		}
 	}
 
@@ -29,16 +34,16 @@ class Header extends Component {
 		if (authorized) {
 			if (!user.vm_authtoken) {
 				return (
-					<button type="button" onClick={this.onLinkVenmo}>
+					<Button onClick={this.onLinkVenmo}>
 						Link Venmo
-					</button>
+					</Button>
 				);
 			}
 
 			return (
-				<button type="button" onClick={this.props.unlinkVenmo}>
-						Unlink Venmo
-					</button>
+				<Button onClick={this.props.unlinkVenmo}>
+					Unlink Venmo
+				</Button>
 			);
 		}
 
@@ -53,7 +58,7 @@ class Header extends Component {
 		}
 
 		return (
-			<button onClick={logout}>Logout</button>
+			<Button onClick={logout}>Logout</Button>
 		);
 	}
 
@@ -74,6 +79,8 @@ Header.propTypes = {
 	logout: PropTypes.func.isRequired,
 	unlinkVenmo: PropTypes.func.isRequired,
 	user: userProp.isRequired,
+	rabbits: PropTypes.arrayOf(rabbitProp).isRequired,
+	getRabbits: PropTypes.func.isRequired,
 };
 
 export default connect(Header);

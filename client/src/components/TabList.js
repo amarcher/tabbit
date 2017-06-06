@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import TabPreview from './TabPreview';
 import connect from '../connect';
@@ -42,7 +43,7 @@ class TabList extends Component {
 		return (
 			<div>
 				{tabs}
-				<button onClick={this.onCreateNewTab}>New Tab</button>
+				<Button onClick={this.onCreateNewTab}>New Tab</Button>
 			</div>
 		);
 	}

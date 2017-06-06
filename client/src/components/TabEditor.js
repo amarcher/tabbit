@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { tab as tabProps, rabbit as rabbitProps } from '../propTypes';
@@ -14,8 +15,6 @@ const DEFAULT_TIP_RATE = 0.18;
 
 class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
 	componentWillMount() {
-		this.props.getRabbits();
-
 		const tab = this.getTab();
 
 		this.state = {
@@ -141,6 +140,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		this.onTaxRateChange = this.onTaxRateChange.bind(this);
 		this.onTipRateChange = this.onTipRateChange.bind(this);
 		this.onSubmitTaxAndTipRate = this.onSubmitTaxAndTipRate.bind(this);
+		this.onMakeRabbitActive = this.onMakeRabbitActive.bind(this);
 	}
 
 	renderItems() {
@@ -159,6 +159,7 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 		const onTagItem = this.onTagItem.bind(this, item);
 		const rabbitIds = item.rabbits.map(rabbit => rabbit.id);
 		const rabbitOwners = this.getRabbits().filter(rabbit => rabbitIds.indexOf(rabbit.id) > -1);
+		const { activeRabbitId } = this.state;
 
 		return (
 			<Item
@@ -167,7 +168,9 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 				item={item}
 				tabId={this.getTabId()}
 				onClick={onTagItem}
+				onMakeRabbitActive={this.onMakeRabbitActive}
 				rabbitOwners={rabbitOwners}
+				activeRabbitId={activeRabbitId}
 			/>
 		);
 	}
@@ -191,24 +194,22 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 					<div>Subtotal: {formatDollar(subtotal)}</div>
 					<div>
 						Tax: {formatDollar(tax)}
-						<button
+						<Button
 							style={style}
-							type="button"
 							onClick={this.onBeginEditTaxAndTipRate}
 						>
 							{formatPercent(taxRate)}
-						</button>
+						</Button>
 						{this.renderTaxEditor()}
 					</div>
 					<div>
 						Tip: {formatDollar(tip)}
-						<button
+						<Button
 							style={style}
-							type="button"
 							onClick={this.onBeginEditTaxAndTipRate}
 						>
 							{formatPercent(tipRate)}
-						</button>
+						</Button>
 						{this.renderTipEditor()}
 					</div>
 					<div>Total: {formatDollar(total)}</div>
@@ -251,9 +252,9 @@ class TabEditor extends Component { // eslint-disable-line react/prefer-stateles
 						defaultValue={tipRate}
 						onChange={this.onTipRateChange}
 					/>
-					<button type="button" onClick={this.onSubmitTaxAndTipRate}>
+					<Button onClick={this.onSubmitTaxAndTipRate}>
 						Save
-					</button>
+					</Button>
 				</span>
 			);
 		}
@@ -321,7 +322,6 @@ TabEditor.propTypes = {
 			id: PropTypes.string.isRequired,
 		}).isRequired,
 	}).isRequired,
-	getRabbits: PropTypes.func.isRequired,
 	getTab: PropTypes.func.isRequired,
 	updateTab: PropTypes.func.isRequired,
 	tagItem: PropTypes.func.isRequired,

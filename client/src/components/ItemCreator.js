@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 class ItemCreator extends Component {
@@ -43,7 +44,7 @@ class ItemCreator extends Component {
 			>
 				<input name="name" type="text" placeholder="Name" onChange={this.onFieldChange} />
 				<input name="price" type="number" step="any" placeholder="Price" onChange={this.onFieldChange} />
-				<button type="submit">+</button>
+				<Button type="submit">+</Button>
 			</form>
 		);
 	}

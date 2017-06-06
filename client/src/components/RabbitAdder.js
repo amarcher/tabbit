@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { rabbit as rabbitProp } from '../propTypes';
 
@@ -47,9 +48,9 @@ class RabbitAdder extends Component {
 		const onRabbitResultClick = this.onRabbitResultClick.bind(this, rabbit);
 
 		return (
-			<button type="button" key={rabbit.id} onClick={onRabbitResultClick}>
+			<Button key={rabbit.id} onClick={onRabbitResultClick}>
 				<span>{rabbit.name}</span>-<span>{rabbit.phone_number}</span>
-			</button>
+			</Button>
 		);
 	}
 
@@ -85,7 +86,7 @@ class RabbitAdder extends Component {
 				<input name="name" autoComplete="off" type="text" placeholder="Name" onChange={this.onFieldChange} />
 				<input name="phone_number" type="tel" placeholder="Phone" onChange={this.onFieldChange} />
 				<input name="email" type="email" placeholder="Email" onChange={this.onFieldChange} />
-				<button type="submit">+</button>
+				<Button type="submit">+</Button>
 				{this.renderResults()}
 			</form>
 		);
