@@ -30,7 +30,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint --ext .js --ext .jsx src && ./node_modules/.bin/jscs src --preset=airbnb",
-    "lint-fix": "./node_modules/.bin/eslint --ext .js --ext .jsx src --fix && ./node_modules/.bin/jscs src --preset=airbnb --fix"
+    "lint-fix": "./node_modules/.bin/eslint --ext .js --ext .jsx src --fix && ./node_modules/.bin/jscs src --preset=airbnb --fix",
+    "deploy-client": "react-scripts build && cd .. && cp -R client/build/* ../tabbit_client/public_html/ && cd ../tabbit_client && git add -A && git commit -m 'next version' && git push origin master && git push heroku master && cd ../tabbit_api"
   },
   "proxy": "http://localhost:3001/",
   "author": "Andrew Archer, Russell Salerno",
