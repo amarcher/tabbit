@@ -63,6 +63,34 @@ npm --prefix client run lint-fix
 
 * Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+* API Deployment instructions
 
-* ...
+To deploy the API:
+
+```bash
+git push heroku master
+```
+
+* Client Deployment instructions
+
+First clone the client repo:
+
+```bash
+git clone git@github.com:amarcher/tabbit-client.git
+```
+
+Then build the client and copy it into the client repo:
+
+```bash
+npm --prefix client run build
+cp -R client/build/* ../PATH/TO/REPO/tabbit-client/public_html/
+```
+
+Then commit the changes and deploy to both github & heroku:
+
+```bash
+cd ../PATH/TO/REPO/tabbit-client/
+git add -A
+git commit -m 'next version'
+git push origin master && git push heroku master
+```
