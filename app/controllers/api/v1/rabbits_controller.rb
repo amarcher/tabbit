@@ -4,9 +4,7 @@ include Authenticatable
 before_action :authorize
 
 def index
-	user = current_user
-	rabbits = current_user.rabbits.sort_by(&:updated_at).reverse
-	render json: rabbits
+	render json: current_user.rabbits.sort_by(&:updated_at).reverse
 end
 
 def create

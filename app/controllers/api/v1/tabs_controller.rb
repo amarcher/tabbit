@@ -4,9 +4,7 @@ class Api::V1::TabsController < ApplicationController
   before_action :authorize
 
   def index
-    user = current_user
-    tabs = current_user.tabs.sort_by(&:updated_at).reverse
-    render json: tabs
+    render json: current_user.tabs.sort_by(&:updated_at).reverse
   end
 
   def show

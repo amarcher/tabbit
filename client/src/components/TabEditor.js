@@ -12,7 +12,7 @@ import { formatDollar, formatPercent } from '../utils';
 const DEFAULT_TAX_RATE = 0.0875;
 const DEFAULT_TIP_RATE = 0.18;
 
-class TabEditor extends Component { // eslint-disable-line react/prefer-stateless-function]
+class TabEditor extends Component {
 	componentWillMount() {
 		this.props.getRabbits();
 
