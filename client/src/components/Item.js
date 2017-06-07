@@ -26,10 +26,16 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 		return rabbitOwners.map(this.renderRabbit, this);
 	}
 
-	renderRabbit(rabbit) { // eslint-disable-line class-methods-use-this
+	renderRabbit(rabbit) {
+		const onMakeRabbitActive = () => this.props.onMakeRabbitActive(rabbit.id);
+		const active = this.props.activeRabbitId === rabbit.id;
 		const name = (rabbit.name || 'U').toUpperCase().charAt(0);
+		const style = {
+			color: active ? 'blue' : 'initial',
+		};
+
 		return (
-			<span key={rabbit.id}>{name}</span>
+			<button key={rabbit.id} style={style} onClick={onMakeRabbitActive}>{name}</button>
 		);
 	}
 
@@ -50,8 +56,10 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 Item.propTypes = {
 	item: itemProp.isRequired,
+	activeRabbitId: PropTypes.number.isRequired,
 	rabbitOwners: PropTypes.arrayOf(rabbitProp).isRequired,
 	tabId: PropTypes.number.isRequired,
 	deleteItem: PropTypes.func.isRequired,
 	onClick: PropTypes.func.isRequired,
+	onMakeRabbitActive: PropTypes.func.isRequired,
 };

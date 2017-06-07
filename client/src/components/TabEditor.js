@@ -141,6 +141,7 @@ class TabEditor extends Component {
 		this.onTaxRateChange = this.onTaxRateChange.bind(this);
 		this.onTipRateChange = this.onTipRateChange.bind(this);
 		this.onSubmitTaxAndTipRate = this.onSubmitTaxAndTipRate.bind(this);
+		this.onMakeRabbitActive = this.onMakeRabbitActive.bind(this);
 	}
 
 	renderItems() {
@@ -159,6 +160,7 @@ class TabEditor extends Component {
 		const onTagItem = this.onTagItem.bind(this, item);
 		const rabbitIds = item.rabbits.map(rabbit => rabbit.id);
 		const rabbitOwners = this.getRabbits().filter(rabbit => rabbitIds.indexOf(rabbit.id) > -1);
+		const { activeRabbitId } = this.state;
 
 		return (
 			<Item
@@ -167,7 +169,9 @@ class TabEditor extends Component {
 				item={item}
 				tabId={this.getTabId()}
 				onClick={onTagItem}
+				onMakeRabbitActive={this.onMakeRabbitActive}
 				rabbitOwners={rabbitOwners}
+				activeRabbitId={activeRabbitId}
 			/>
 		);
 	}
