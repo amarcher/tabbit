@@ -56,10 +56,14 @@ export default class Item extends Component { // eslint-disable-line react/prefe
 
 Item.propTypes = {
 	item: itemProp.isRequired,
-	activeRabbitId: PropTypes.number.isRequired,
+	activeRabbitId: PropTypes.number,
 	rabbitOwners: PropTypes.arrayOf(rabbitProp).isRequired,
 	tabId: PropTypes.number.isRequired,
 	deleteItem: PropTypes.func.isRequired,
 	onClick: PropTypes.func.isRequired,
 	onMakeRabbitActive: PropTypes.func.isRequired,
+};
+
+Item.defaultProps = {
+	activeRabbitId: undefined,
 };
