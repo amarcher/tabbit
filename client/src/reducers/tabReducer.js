@@ -29,7 +29,7 @@ export default function tabReducer(tabs = [], action) {
 		case 'TABS_FETCH_SUCCEEDED':
 			return action.tabs;
 		case 'TAB_CREATE_SUCCEEDED':
-			return upsert(action.tab, tabs);
+		case 'TAB_UPDATE_SUCCEEDED':
 		case 'TAB_FETCH_SUCCEEDED':
 			return upsert(action.tab, tabs);
 

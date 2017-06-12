@@ -8,6 +8,7 @@ import RabbitAdder from './RabbitAdder';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 import { formatDollar, formatPercent } from '../utils';
+import TextEditor from './TextEditor';
 
 const DEFAULT_TAX_RATE = 0.0875;
 const DEFAULT_TIP_RATE = 0.18;
@@ -103,6 +104,14 @@ class TabEditor extends Component {
 		});
 	}
 
+	onEditTabName(name) {
+		const tabId = this.getTabId();
+
+		this.props.updateTab(tabId, {
+			name,
+		});
+	}
+
 	getTabId() {
 		return parseInt(this.props.match.params.id, 10);
 	}
@@ -142,6 +151,7 @@ class TabEditor extends Component {
 		this.onTipRateChange = this.onTipRateChange.bind(this);
 		this.onSubmitTaxAndTipRate = this.onSubmitTaxAndTipRate.bind(this);
 		this.onMakeRabbitActive = this.onMakeRabbitActive.bind(this);
+		this.onEditTabName = this.onEditTabName.bind(this);
 	}
 
 	renderItems() {
@@ -307,7 +317,7 @@ class TabEditor extends Component {
 
 		return (
 			<div>
-				<h2>{name}</h2>
+				<TextEditor updateText={this.onEditTabName} originalText={name} />
 				{this.renderSubtotalTaxAndTip()}
 				{this.renderItems()}
 				{this.renderRabbits()}
