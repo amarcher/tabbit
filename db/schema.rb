@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602152131) do
+ActiveRecord::Schema.define(version: 20170612063935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,14 +48,14 @@ ActiveRecord::Schema.define(version: 20170602152131) do
 
   create_table "tabs", force: :cascade do |t|
     t.string   "name",                                default: "Untitled Tab"
-    t.date     "dine_date",                           default: '2017-05-15'
+    t.date     "dine_date",                           default: '2017-06-05'
     t.text     "raw_text"
     t.string   "url"
     t.string   "img_url"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "tax_rate",   precision: 10, scale: 5, default: "0.0875"
+    t.decimal  "tax_rate",   precision: 10, scale: 5, default: "0.085"
     t.decimal  "tip_rate",   precision: 10, scale: 5, default: "0.18"
   end
 
