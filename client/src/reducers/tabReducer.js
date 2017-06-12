@@ -31,6 +31,7 @@ export default function tabReducer(tabs = [], action) {
 		case 'TAB_CREATE_SUCCEEDED':
 		case 'TAB_UPDATE_SUCCEEDED':
 		case 'TAB_FETCH_SUCCEEDED':
+		case 'OCR_SUCCEEDED':
 			return upsert(action.tab, tabs);
 
 		case 'ITEM_CREATE_SUCCEEDED':

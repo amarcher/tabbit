@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 		namespace :v1 do
 			resources :tabs, only: [:index, :create, :show, :update] do
 				resources :items, only: [:create, :destroy, :update]
+				post 'image', to: 'tabs#analyze_image'
 				delete 'rabbits/:id', to: 'rabbits#remove_from_tab'
 				post 'rabbits/:id/charge', to: 'rabbits#charge_rabbit'
 				post 'rabbits/:id', to: 'rabbits#add_to_tab'

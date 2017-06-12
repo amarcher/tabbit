@@ -1,3 +1,5 @@
+require "google/cloud/vision"
+
 class Api::V1::TabsController < ApplicationController
   include Authenticatable
 
@@ -65,10 +67,48 @@ class Api::V1::TabsController < ApplicationController
     }
   end
 
+  def analyze_image
+    tab = current_user.tabs.find(params[:tab_id])
+    raw_text = get_raw_text(params[:image])
+
+    prices = raw_text.scan(/\d+[.]\d+/)
+    names = raw_text.scan(/[\dIli] +[\w ]+/)
+
+    length = [prices.length, names.length].min
+
+    items = (1 .. length).to_a.map do |index|
+      Item.new(price: prices[index], name: names[index])
+    end
+
+    tab.items << items
+
+    tab.update_attributes!(raw_text: raw_text)
+
+    render json: tab, :include => {
+      :items => {
+        :include => {
+          :rabbits => {
+            :only => :id
+          }
+        }
+      },
+      :rabbits => {}
+    }
+  end
+
   private
 
     def tab_params
       params.require(:tab).permit(:name, :items, :rabbits, :tax_rate, :tip_rate, :dine_date, :text)
+    end
+
+    def get_raw_text(image_data_url)
+      png = Base64.decode64(image_data_url['data:image/png;base64,'.length .. -1])
+      File.open('receipt.png', 'wb') { |f| f.write(png) }
+      vision = Google::Cloud::Vision.new project: ENV['GOOGLE_CLOUD_PROJECT']
+      image = vision.image('receipt.png')
+      File.delete('receipt.png') if File.exist?('receipt.png')
+      image.document.text
     end
 end
 
