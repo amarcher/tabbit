@@ -5,6 +5,7 @@ import { tab as tabProps, rabbit as rabbitProps } from '../propTypes';
 import Item from './Item';
 import Rabbit from './Rabbit';
 import RabbitAdder from './RabbitAdder';
+import OCR from './OCR';
 import ItemCreator from './ItemCreator';
 import connect from '../connect';
 import { formatDollar, formatPercent } from '../utils';
@@ -312,6 +313,21 @@ class TabEditor extends Component {
 		);
 	}
 
+	renderOCR() {
+		const tab = this.getTab();
+
+		const runOCR = (dataURL) => {
+			this.props.runOCR(tab.id, dataURL);
+		};
+
+		return (
+			<div>
+				{tab.raw_text}
+				<OCR runOCR={runOCR} />
+			</div>
+		);
+	}
+
 	render() {
 		const { name } = this.getTab();
 
@@ -322,6 +338,7 @@ class TabEditor extends Component {
 				{this.renderItems()}
 				{this.renderRabbits()}
 				<Link to="/tabs">All Tabs</Link>
+				{this.renderOCR()}
 			</div>
 		);
 	}
@@ -339,6 +356,7 @@ TabEditor.propTypes = {
 	getTab: PropTypes.func.isRequired,
 	updateTab: PropTypes.func.isRequired,
 	tagItem: PropTypes.func.isRequired,
+	runOCR: PropTypes.func.isRequired,
 	untagItem: PropTypes.func.isRequired,
 };
 

@@ -449,6 +449,32 @@ function* unlinkVenmo() {
 	}
 }
 
+function* runOCR(action) {
+	try {
+		const resp = yield call(ajax.post.bind(undefined, `/api/v1/tabs/${action.tabId}/image`, {
+			image: action.dataURL,
+		}));
+
+		if (isUnauthorized(resp)) {
+			yield put({
+				type: 'LOGIN_REQUIRED',
+			});
+
+			return;
+		}
+
+		yield put({
+			type: 'OCR_SUCCEEDED',
+			tab: resp,
+		});
+	} catch (e) {
+		yield put({
+			type: 'OCR_FAILED',
+			message: e.message,
+		});
+	}
+}
+
 function* saga() {
 	yield takeEvery('USER_FETCH_REQUESTED', getUser);
 	yield takeEvery('TABS_FETCH_REQUESTED', getTabs);
@@ -468,6 +494,7 @@ function* saga() {
 	yield takeEvery('RABBIT_REMOVE_REQUESTED', removeRabbitFromTab);
 	yield takeEvery('VENMO_CHARGE_RABBIT_REQUESTED', chargeRabbit);
 	yield takeEvery('VENMO_UNLINK_REQUESTED', unlinkVenmo);
+	yield takeEvery('OCR_REQUESTED', runOCR);
 }
 
 export default saga;

@@ -136,3 +136,11 @@ export function unlinkVenmo() {
 		type: 'VENMO_UNLINK_REQUESTED',
 	};
 }
+
+export function runOCR(tabId, dataURL) {
+	return {
+		type: 'OCR_REQUESTED',
+		tabId,
+		dataURL,
+	};
+}
