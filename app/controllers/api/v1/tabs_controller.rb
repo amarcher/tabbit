@@ -74,9 +74,7 @@ class Api::V1::TabsController < ApplicationController
     prices = raw_text.scan(/\d+[.]\d+/)
     names = raw_text.scan(/[\dIli] +[\w ]+/)
 
-    length = [prices.length, names.length].min
-
-    items = (1 .. length).to_a.map do |index|
+    items = (0 .. (prices.length - 1)).to_a.map do |index|
       Item.new(price: prices[index], name: names[index])
     end
 
