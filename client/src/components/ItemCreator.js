@@ -25,6 +25,7 @@ class ItemCreator extends Component {
 			name: '',
 			price: '',
 		});
+		this.form.children[0].focus();
 	}
 
 	bindEventHandlers() {
