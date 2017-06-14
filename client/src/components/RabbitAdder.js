@@ -41,6 +41,7 @@ class RabbitAdder extends Component {
 	resetState() {
 		this.setState(defaultState);
 		this.form.reset();
+		this.form.children[0].focus();
 	}
 
 	renderResult(rabbit) {
