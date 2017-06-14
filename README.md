@@ -1,9 +1,8 @@
-# README
+# TABBIT
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+An application for groups to fairly split & pay tabs at restaurants. 
 
-Things you may want to cover:
+# DEVELOPMENT DETAILS
 
 * Ruby version
 
