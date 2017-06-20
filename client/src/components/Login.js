@@ -17,11 +17,18 @@ class Login extends Component {
 
 	onSubmit(event) {
 		event.preventDefault();
-		this.props.login(this.state);
+
+		if (!this.props.errors.LOGIN_FAILED) {
+			this.props.login(this.state);
+		}
 	}
 
 	onFieldChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
+		this.setState({ [event.target.name]: event.target.value }, () => {
+			if (this.props.errors.LOGIN_FAILED) {
+				this.props.clearErrors();
+			}
+		});
 	}
 
 	bindEventHandlers() {
@@ -29,10 +36,26 @@ class Login extends Component {
 		this.onFieldChange = this.onFieldChange.bind(this);
 	}
 
+	renderErrors() {
+		const loginErrors = this.props.errors.LOGIN_FAILED;
+
+		if (loginErrors) {
+			return loginErrors.map(loginError => (
+				<div className="error" key={loginError}>
+					{loginError}
+				</div>
+			));
+		}
+
+		return '';
+	}
+
 	render() {
 		if (this.props.authorized) {
 			return <Redirect to="/tabs" />;
 		}
+
+		const disabled = this.props.errors.LOGIN_FAILED;
 
 		return (
 			<div className="App">
@@ -57,8 +80,10 @@ class Login extends Component {
 						onChange={this.onFieldChange}
 					/>
 
-					<button type="submit">Login</button>
+					<button type="submit" disabled={disabled}>Login</button>
 				</form>
+
+				{this.renderErrors()}
 
 				<Link to="/signup">Sign Up</Link>
 			</div>
@@ -69,6 +94,10 @@ class Login extends Component {
 Login.propTypes = {
 	login: PropTypes.func.isRequired,
 	authorized: PropTypes.bool.isRequired,
+	errors: PropTypes.shape({
+		LOGIN_FAILED: PropTypes.array,
+	}).isRequired,
+	clearErrors: PropTypes.func.isRequired,
 };
 
 export default connect(Login);

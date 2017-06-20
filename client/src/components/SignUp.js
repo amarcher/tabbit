@@ -19,11 +19,18 @@ class SignUp extends Component {
 
 	onSubmit(event) {
 		event.preventDefault();
-		this.props.createUser(this.state);
+
+		if (!this.props.errors.USER_CREATE_FAILED) {
+			this.props.createUser(this.state);
+		}
 	}
 
 	onFieldChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
+		this.setState({ [event.target.name]: event.target.value }, () => {
+			if (this.props.errors.USER_CREATE_FAILED) {
+				this.props.clearErrors();
+			}
+		});
 	}
 
 	bindEventHandlers() {
@@ -31,10 +38,26 @@ class SignUp extends Component {
 		this.onFieldChange = this.onFieldChange.bind(this);
 	}
 
+	renderErrors() {
+		const userCreateErrors = this.props.errors.USER_CREATE_FAILED;
+
+		if (userCreateErrors) {
+			return userCreateErrors.map(userCreateError => (
+				<div className="error" key={userCreateError}>
+					{userCreateError}
+				</div>
+			));
+		}
+
+		return '';
+	}
+
 	render() {
 		if (this.props.authorized) {
 			return <Redirect to="/tabs" />;
 		}
+
+		const disabled = this.props.errors.USER_CREATE_FAILED;
 
 		return (
 			<div className="App">
@@ -75,8 +98,10 @@ class SignUp extends Component {
 						onChange={this.onFieldChange}
 					/>
 
-					<button type="submit">SignUp</button>
+					<button type="submit" disabled={disabled}>SignUp</button>
 				</form>
+
+				{this.renderErrors()}
 
 				<Link to="/">Login</Link>
 			</div>
@@ -87,6 +112,10 @@ class SignUp extends Component {
 SignUp.propTypes = {
 	createUser: PropTypes.func.isRequired,
 	authorized: PropTypes.bool.isRequired,
+	errors: PropTypes.shape({
+		USER_CREATE_FAILED: PropTypes.array,
+	}).isRequired,
+	clearErrors: PropTypes.func.isRequired,
 };
 
 export default connect(SignUp);

@@ -144,3 +144,9 @@ export function runOCR(tabId, dataURL) {
 		dataURL,
 	};
 }
+
+export function clearErrors() {
+	return {
+		type: 'CLEAR_ERRORS',
+	};
+}

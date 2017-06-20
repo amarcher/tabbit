@@ -1,6 +1,11 @@
 import Auth from '../auth';
 
 export default function authorizationReducer(authorized = false, action) {
+	if ([401, 422].indexOf(action.status) > -1) {
+		Auth.logout();
+		return false;
+	}
+
 	switch (action.type) {
 		case 'LOGIN_SUCCEEDED':
 		case 'USER_CREATE_SUCCEEDED':

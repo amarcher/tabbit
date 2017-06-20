@@ -18,6 +18,25 @@ function getAuthToken() {
 	return readCookie(document.cookie).auth_token;
 }
 
+function parseAndHandleErrors(response) {
+	const { ok, status, statusText } = response;
+
+	return new Promise((resolve, reject) => {
+		response.json().then((parsedBody) => {
+			if (response.ok) {
+				resolve(parsedBody);
+			} else {
+				reject({
+					...parsedBody,
+					ok,
+					status,
+					statusText,
+				});
+			}
+		});
+	});
+}
+
 const Ajax = {
 	get(url, params = {}) {
 		return fetch(`${url}?${serialize(params)}`, {
@@ -26,7 +45,7 @@ const Ajax = {
 				Accept: 'application/json',
 				Authorization: getAuthToken(),
 			},
-		}).then(resp => resp.json());
+		}).then(parseAndHandleErrors);
 	},
 
 	post(url, params = {}, method = 'post') {
@@ -38,7 +57,7 @@ const Ajax = {
 				Authorization: getAuthToken(),
 			},
 			body: JSON.stringify(params),
-		}).then(resp => resp.json());
+		}).then(parseAndHandleErrors);
 	},
 
 	destroy(url, params = {}) {

@@ -12,7 +12,7 @@ class Header extends Component {
 	}
 
 	componentWillMount() {
-		if (!this.props.user.id) {
+		if (this.props.authorized && !this.props.user.id) {
 			this.props.getUser();
 		}
 	}
