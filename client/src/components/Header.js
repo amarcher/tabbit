@@ -12,7 +12,7 @@ class Header extends Component {
 	}
 
 	componentWillMount() {
-		if (this.props.authorized && !this.props.user.id) {
+		if (this.props.authorized && !(this.props.user && this.props.user.id)) {
 			this.props.getUser();
 		}
 	}
@@ -26,7 +26,7 @@ class Header extends Component {
 	renderLinkVenmo() {
 		const { user, authorized } = this.props;
 
-		if (authorized) {
+		if (user && authorized) {
 			if (!user.vm_authtoken) {
 				return (
 					<button type="button" onClick={this.onLinkVenmo}>
