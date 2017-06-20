@@ -71,11 +71,11 @@ class Api::V1::TabsController < ApplicationController
     tab = current_user.tabs.find(params[:tab_id])
     raw_text = get_raw_text(params[:image])
 
-    prices = raw_text.scan(/\d+[.]\d+/)
+    prices = raw_text.scan(/[\d,]*\d+[.]\d{2}/)
     names = raw_text.scan(/[\dIli] +[\w ]+/)
 
     items = (0 .. (prices.length - 1)).to_a.map do |index|
-      Item.new(price: prices[index], name: names[index])
+      Item.new(price: prices[index], name: names[index] ? names[index].strip : nil)
     end
 
     tab.items << items
