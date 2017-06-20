@@ -1,8 +1,19 @@
 import { post, destroy, getAuthToken } from './ajax';
 
+function oneYearFromNow() {
+	const oneYearFromNow = new Date();
+	oneYearFromNow.setDate(oneYearFromNow.getDate() + 364);
+	return oneYearFromNow.toUTCString();
+}
+
 function setCookie(resp = {}) {
 	const authToken = resp.auth_token || '';
-	document.cookie = `auth_token=${authToken}; `;
+
+	if (authToken) {
+		document.cookie = `auth_token=${authToken}; expires=${oneYearFromNow()};`;
+	} else {
+		document.cookie = `auth_token=${authToken}`;
+	}
 
 	return resp;
 }
