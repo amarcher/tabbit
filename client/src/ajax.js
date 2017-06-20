@@ -9,7 +9,7 @@ function readCookie(cookie) {
 
 	return cookie.split('; ').reduce((params, keyValue) => {
 		const keyValuePair = keyValue.split('=');
-		params[keyValuePair[0]] = keyValuePair[1]; // eslint-disable-line no-param-reassign
+		params[keyValuePair[0]] = String(keyValuePair[1]).trim(); // eslint-disable-line no-param-reassign
 		return params;
 	}, {});
 }
