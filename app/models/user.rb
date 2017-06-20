@@ -1,8 +1,13 @@
 require 'bcrypt'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
+  validates :name, length: { in: 2..64 }
+  validates :password, length: { minimum: 6, allow_blank: false }
+  validates :phone_number, length: { minimum: 10, allow_blank: true }
   validates :email, uniqueness: true
+  validates :email, presence: true
   validates :auth_token, uniqueness: true
+  validates :password, presence: true
   has_many :rabbits
   has_many :tabs
   include BCrypt

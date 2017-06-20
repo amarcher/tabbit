@@ -23,13 +23,15 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     @user = User.new(name: params['name'], phone_number: params['phone'], email: params['email'])
+    if !params[:password] || params[:password].length < 6
+      render json: { errors: 'Please enter a password of at least six characters' }, status: 422
+      return
+    end
     @user.password = params['password']
-    if @user.save!
-      @user.generate_authentication_token!
-      @user.save!
+    if @user.save
       render json: @user, only: [:id, :vm_authtoken, :auth_token], status: 200
     else
-      render json: { errors: "Could not create user" }, status: 422
+      render json: { errors: @user.errors.full_messages }, status: 422
     end
   end
 

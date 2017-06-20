@@ -3,7 +3,6 @@ class Api::V1::SessionsController < ApplicationController
     user_password = params['password']
     user_email = params['email']
     user = user_email.present? && User.find_by(email: user_email)
-
     if user && user.password == user_password
       user.generate_authentication_token!
       user.save!

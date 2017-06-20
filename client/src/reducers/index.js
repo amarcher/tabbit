@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import authorizationReducer from './authorizationReducer';
+import errorsReducer from './errorsReducer';
 import tabReducer from './tabReducer';
 import rabbitReducer from './rabbitReducer';
 import userReducer from './userReducer';
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
 	authorized: authorizationReducer,
 	tabs: tabReducer,
 	rabbits: rabbitReducer,
+	errors: errorsReducer,
 });
 
 export default rootReducer;

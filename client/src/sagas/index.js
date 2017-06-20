@@ -2,25 +2,13 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import ajax from '../ajax';
 import Auth from '../auth';
 
-function isUnauthorized(resp) {
-	const unauthorizedErrors = ['Invalid email or password', 'Unauthorized', 'Unprocessable Entity'];
-	const hasUnauthorizedError = resp.errors && unauthorizedErrors.indexOf(resp.errors) > -1;
-	const hasUnauthorizedStatus = [401, 422].indexOf(resp.status) > -1;
-
-	return hasUnauthorizedStatus || hasUnauthorizedError;
+function getErrors(e) {
+	return e.errors || e.statusText || e.message;
 }
 
 function* getUser() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/user'));
-
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
 
 		yield put({
 			type: 'USER_FETCH_SUCCEEDED',
@@ -29,7 +17,8 @@ function* getUser() {
 	} catch (e) {
 		yield put({
 			type: 'USER_FETCH_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -38,22 +27,15 @@ function* getTabs() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/tabs'));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'TABS_FETCH_SUCCEEDED',
 			tabs: resp,
 		});
 	} catch (e) {
 		yield put({
-			type: 'TABS_FETCH_FAILED',
-			message: e.message,
+			type: 'TAB_FETCH_FAILED',
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -62,14 +44,6 @@ function* getTab(action) {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, `/api/v1/tabs/${action.tabId}`));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'TAB_FETCH_SUCCEEDED',
 			tab: resp,
@@ -77,7 +51,8 @@ function* getTab(action) {
 	} catch (e) {
 		yield put({
 			type: 'TAB_FETCH_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -86,14 +61,6 @@ function* createTab() {
 	try {
 		const resp = yield call(ajax.post.bind(undefined, '/api/v1/tabs'));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'TAB_CREATE_SUCCEEDED',
 			tab: resp,
@@ -101,7 +68,8 @@ function* createTab() {
 	} catch (e) {
 		yield put({
 			type: 'TAB_CREATE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -110,14 +78,6 @@ function* updateTab(action) {
 	try {
 		const resp = yield call(ajax.put.bind(undefined, `/api/v1/tabs/${action.tabId}`, action.changedTabProps));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'TAB_UPDATE_SUCCEEDED',
 			tab: resp,
@@ -125,7 +85,8 @@ function* updateTab(action) {
 	} catch (e) {
 		yield put({
 			type: 'TAB_UPDATE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -134,14 +95,6 @@ function* login(action) {
 	try {
 		const resp = yield call(Auth.login.bind(undefined, action.credentials));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_FAILED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'LOGIN_SUCCEEDED',
 			user: resp,
@@ -149,7 +102,8 @@ function* login(action) {
 	} catch (e) {
 		yield put({
 			type: 'LOGIN_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -164,7 +118,8 @@ function* logout() {
 	} catch (e) {
 		yield put({
 			type: 'LOGOUT_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -173,14 +128,6 @@ function* createUser(action) {
 	try {
 		const resp = yield call(Auth.createUser.bind(undefined, action.credentials));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'USER_CREATE_FAILED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'USER_CREATE_SUCCEEDED',
 			user: resp,
@@ -188,7 +135,8 @@ function* createUser(action) {
 	} catch (e) {
 		yield put({
 			type: 'USER_CREATE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -197,14 +145,6 @@ function* createItem(action) {
 	try {
 		const resp = yield call(ajax.post.bind(undefined, `/api/v1/tabs/${action.tabId}/items`, action.item));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'ITEM_CREATE_SUCCEEDED',
 			item: resp,
@@ -212,7 +152,8 @@ function* createItem(action) {
 	} catch (e) {
 		yield put({
 			type: 'ITEM_CREATE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -221,14 +162,6 @@ function* deleteItem(action) {
 	try {
 		const resp = yield call(ajax.destroy.bind(undefined, `/api/v1/tabs/${action.tabId}/items/${action.item.id}`));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'ITEM_DELETE_SUCCEEDED',
 			item: resp,
@@ -236,7 +169,8 @@ function* deleteItem(action) {
 	} catch (e) {
 		yield put({
 			type: 'ITEM_DELETE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -247,14 +181,6 @@ function* tagItem(action) {
 			rabbit_id: action.rabbitId,
 		}));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'ITEM_TAG_SUCCEEDED',
 			item: resp,
@@ -262,7 +188,8 @@ function* tagItem(action) {
 	} catch (e) {
 		yield put({
 			type: 'ITEM_TAG_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -274,14 +201,6 @@ function* untagItem(action) {
 			remove: true,
 		}));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'ITEM_UNTAG_SUCCEEDED',
 			item: resp,
@@ -289,7 +208,8 @@ function* untagItem(action) {
 	} catch (e) {
 		yield put({
 			type: 'ITEM_UNTAG_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -298,14 +218,6 @@ function* getRabbits() {
 	try {
 		const resp = yield call(ajax.get.bind(undefined, '/api/v1/rabbits'));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'RABBITS_FETCH_SUCCEEDED',
 			rabbits: resp,
@@ -313,7 +225,8 @@ function* getRabbits() {
 	} catch (e) {
 		yield put({
 			type: 'RABBITS_FETCH_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -325,14 +238,6 @@ function* createRabbit(action) {
 			tab_id: action.tabId,
 		}));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'RABBIT_CREATE_SUCCEEDED',
 			rabbit: resp.rabbit ? resp.rabbit : resp,
@@ -341,7 +246,8 @@ function* createRabbit(action) {
 	} catch (e) {
 		yield put({
 			type: 'RABBIT_CREATE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -351,14 +257,6 @@ function* addRabbitToTab(action) {
 		const uri = `/api/v1/tabs/${action.tabId}/rabbits/${action.rabbit.id}`;
 		const resp = yield call(ajax.post.bind(undefined, uri));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'RABBIT_ADD_SUCCEEDED',
 			rabbit: resp.rabbit,
@@ -367,7 +265,8 @@ function* addRabbitToTab(action) {
 	} catch (e) {
 		yield put({
 			type: 'RABBIT_ADD_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -377,14 +276,6 @@ function* removeRabbitFromTab(action) {
 		const uri = `/api/v1/tabs/${action.tabId}/rabbits/${action.rabbit.id}`;
 		const resp = yield call(ajax.destroy.bind(undefined, uri));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'RABBIT_REMOVE_SUCCEEDED',
 			rabbitId: resp.id,
@@ -393,7 +284,8 @@ function* removeRabbitFromTab(action) {
 	} catch (e) {
 		yield put({
 			type: 'RABBIT_REMOVE_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -405,14 +297,6 @@ function* chargeRabbit(action) {
 			amount: action.amount,
 		}));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'VENMO_CHARGE_RABBIT_SUCCEEDED',
 			tabs: resp,
@@ -420,7 +304,8 @@ function* chargeRabbit(action) {
 	} catch (e) {
 		yield put({
 			type: 'VENMO_CHARGE_RABBIT_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -429,14 +314,6 @@ function* unlinkVenmo() {
 	try {
 		const resp = yield call(ajax.destroy.bind(undefined, '/api/v1/user/venmo'));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'VENMO_UNLINK_SUCCEEDED',
 			user: resp,
@@ -444,7 +321,8 @@ function* unlinkVenmo() {
 	} catch (e) {
 		yield put({
 			type: 'VENMO_UNLINK_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
@@ -455,14 +333,6 @@ function* runOCR(action) {
 			image: action.dataURL,
 		}));
 
-		if (isUnauthorized(resp)) {
-			yield put({
-				type: 'LOGIN_REQUIRED',
-			});
-
-			return;
-		}
-
 		yield put({
 			type: 'OCR_SUCCEEDED',
 			tab: resp,
@@ -470,7 +340,8 @@ function* runOCR(action) {
 	} catch (e) {
 		yield put({
 			type: 'OCR_FAILED',
-			message: e.message,
+			errors: getErrors(e),
+			status: e.status,
 		});
 	}
 }
