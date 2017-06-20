@@ -4,7 +4,7 @@ RSpec.describe Tab, type: :model do
 
   let(:tab) { Tab.new }
   let(:dine_date) { Date.today }
-  let(:user) { User.new }
+  let(:user) { User.new(name: "Samantha", password: "forever") }
 
   before :each do
     user.tabs << tab

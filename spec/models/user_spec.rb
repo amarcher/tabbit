@@ -24,6 +24,7 @@ RSpec.describe User, type: :model do
   it 'should create a rabbit after_create, assign that rabbit to be its avatar & add it to its rabbits' do
     expect(Rabbit).to receive(:create).with(hash_including(name: 'Andrew', email: 'aarcher520@gmail.com', phone_number: '415-555-5555'))
                                       .and_return(rabbit)
+    user.password = 'password'
     user.save!
     expect(user.avatar_rabbit_id).to eq 123
     expect(user.rabbits).to eq [rabbit]
@@ -41,7 +42,8 @@ RSpec.describe User, type: :model do
       existing_user = User.new(
         name: 'Herald',
         email: 'herald@gmail.com',
-        phone_number: '415-209-3333'
+        phone_number: '415-209-3333',
+        password: 'forever'
       )
       existing_user.save!
       user.generate_authentication_token!
