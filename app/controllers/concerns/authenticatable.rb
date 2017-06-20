@@ -4,6 +4,6 @@ module Authenticatable
 	end
 
 	def authorize
-		render json: { errors: "Unauthorized", status: 401 } unless current_user
+		render json: { errors: "Unauthorized" }, status: 401 unless current_user
 	end
 end
