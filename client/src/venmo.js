@@ -1,6 +1,6 @@
 const VENMO_BASE_URI = 'https://api.venmo.com/v1/oauth/authorize';
 const VENMO_SCOPES = ['make_payments', 'access_profile', 'access_email', 'access_phone', 'access_balance'];
-const VENMO_REDIRECT_URI_BASE = 'http://tabbit-client.herokuapp.com/venmo/';
+const VENMO_REDIRECT_URI_BASE = 'http://tabbit-react.herokuapp.com/venmo/';
 const VENMO_CLIENT_ID = '2106';
 const VENMO_CGI_PARAMS = `client_id=${VENMO_CLIENT_ID}&scope=${VENMO_SCOPES.join('%20')}&response_type=code`;
 
