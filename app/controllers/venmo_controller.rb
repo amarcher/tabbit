@@ -2,7 +2,7 @@ class VenmoController < ApplicationController
 	include Authenticatable
 
 	def add_venmo
-		url = "https://api.venmo.com/v1/oauth/authorize?client_id=#{ENV['VENMOID']}&scope=make_payments%20access_profile%20access_email%20access_phone%20access_balance&response_type=code&redirect_uri=http://www.tabbitrabbit.com/venmo/#{current_user.id}/"
+		url = "https://api.venmo.com/v1/oauth/authorize?client_id=#{ENV['VENMOID']}&scope=make_payments%20access_profile%20access_email%20access_phone%20access_balance&response_type=code&redirect_uri=http://tabbit-client.herokuapp.com/venmo/#{current_user.id}/"
 		redirect_to url
 	end
 
