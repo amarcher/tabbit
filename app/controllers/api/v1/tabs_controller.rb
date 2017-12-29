@@ -72,7 +72,7 @@ class Api::V1::TabsController < ApplicationController
     raw_text = get_raw_text(params[:image])
 
     prices = raw_text.scan(/\d+[.]\d+/)
-    names = raw_text.scan(/[\dIli] +[\w ]+/)
+    names = raw_text.scan(/([\dIli] )?[^$.\d]+/)
 
     items = (0 .. (prices.length - 1)).to_a.map do |index|
       Item.new(price: prices[index], name: names[index])
