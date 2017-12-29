@@ -18,4 +18,8 @@ class VenmoController < ApplicationController
 				"</script>".html_safe
 		end
 	end
+
+	def venmo_whats_this
+		puts params
+	end
 end

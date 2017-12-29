@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 	get '/venmo/:user_id/', to: 'venmo#venmo_webhook'
+	post '/venmo/:user_id/', to: 'venmo#venmo_whats_this'
 
 	namespace :api do
 		namespace :v1 do
