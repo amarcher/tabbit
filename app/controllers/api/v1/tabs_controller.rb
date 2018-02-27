@@ -75,7 +75,7 @@ class Api::V1::TabsController < ApplicationController
     names = raw_text.scan(/(?:(?<![.\d])[\dIli]{1,2} )?[^$\d]{2,}/)
 
     items = (0 .. (prices.length - 1)).to_a.map do |index|
-      Item.new(price: prices[index], name: names[index].strip)
+      Item.new(price: prices[index], name: names[index] && names[index].strip)
     end
 
     tab.items << items
