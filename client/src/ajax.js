@@ -1,5 +1,3 @@
-import 'whatwg-fetch';
-
 function serialize(params) {
 	return Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
 }
@@ -71,4 +69,6 @@ const Ajax = {
 	getAuthToken,
 };
 
-module.exports = Ajax;
+export const { get, post, destroy, put } = Ajax;
+export { getAuthToken };
+export default Ajax;

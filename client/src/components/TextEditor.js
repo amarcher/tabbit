@@ -12,10 +12,10 @@ export default class TextEditor extends Component {
 		this.bindEventHandlers();
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.originalText !== this.props.originalText) {
+	componentDidUpdate(prevProps) {
+		if (this.props.originalText !== prevProps.originalText) {
 			this.setState({
-				text: nextProps.originalText,
+				text: this.props.originalText,
 			});
 		}
 	}
