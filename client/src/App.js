@@ -6,13 +6,12 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import TabList from './components/TabList';
 import TabEditor from './components/TabEditor';
-import { history } from './store';
 import connect from './connect';
 import './App.css';
 
 function App() {
 	return (
-		<Router history={history}>
+		<Router>
 			<div>
 				<Header />
 				<Switch>

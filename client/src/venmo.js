@@ -21,8 +21,8 @@ function checkForToken(callback, event) {
 }
 
 export function getPopUpParams() {
-	const screenWidth = screen.width;
-	const screenHeight = screen.height;
+	const screenWidth = window.screen.width;
+	const screenHeight = window.screen.height;
 	const left = (screenWidth / 2.0) - (POPUP_WIDTH / 2.0);
 	const top = (screenHeight / 2.0) - (POPUP_HEIGHT / 2.0);
 	return `${POPUP_PARAMS},width=${POPUP_WIDTH},height=${POPUP_HEIGHT},top=${top},left=${left}`;

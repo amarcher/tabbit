@@ -11,7 +11,7 @@ class Header extends Component {
 		this.onLinkVenmo = this.onLinkVenmo.bind(this);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		if (this.props.authorized && !this.props.user.id) {
 			this.props.getUser();
 		}
@@ -37,8 +37,8 @@ class Header extends Component {
 
 			return (
 				<button type="button" onClick={this.props.unlinkVenmo}>
-						Unlink Venmo
-					</button>
+					Unlink Venmo
+				</button>
 			);
 		}
 

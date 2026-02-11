@@ -2,17 +2,9 @@
     "env": {
         "browser": true
     },
-    "extends": "airbnb",
-    "plugins": [
-        "react",
-        "jsx-a11y",
-        "import"
-    ],
+    "extends": "react-app",
     "rules": {
         "indent": ["error", "tab", { "SwitchCase": 1 }],
-        "react/jsx-indent":  ["error", "tab"],
-        "react/jsx-indent-props":  ["error", "tab"],
-        "react/jsx-filename-extension": "off",
         "no-tabs": "off",
         "max-len": ["error", 120]
     },

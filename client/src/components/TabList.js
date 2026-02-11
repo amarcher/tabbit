@@ -14,13 +14,13 @@ class TabList extends Component {
 		this.bindEventHandlers();
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.getTabs();
 	}
 
-	componentWillUpdate(nextProps) {
-		if (this.state.creatingNewTab && (nextProps.tabs.length > this.props.tabs.length)) {
-			const newlyCreatedTab = nextProps.tabs[nextProps.tabs.length - 1];
+	componentDidUpdate(prevProps) {
+		if (this.state.creatingNewTab && (this.props.tabs.length > prevProps.tabs.length)) {
+			const newlyCreatedTab = this.props.tabs[this.props.tabs.length - 1];
 			this.props.history.push(`/tab/${newlyCreatedTab.id}/edit`);
 		}
 	}

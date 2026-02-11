@@ -15,10 +15,10 @@ const DEFAULT_TAX_RATE = 0.0875;
 const DEFAULT_TIP_RATE = 0.18;
 
 class TabEditor extends Component {
-	componentWillMount() {
-		this.props.getRabbits();
+	constructor(props) {
+		super(props);
 
-		const tab = this.getTab();
+		const tab = props.tabs.find(t => t.id === parseInt(props.match.params.id, 10)) || {};
 
 		this.state = {
 			activeRabbitId: undefined,
@@ -27,16 +27,20 @@ class TabEditor extends Component {
 			editingTaxAndTipRate: false,
 		};
 
-		if (!this.getItems().length) {
-			this.props.getTab(this.getTabId());
-		}
-
 		this.bindEventHandlers();
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const prevTab = this.getTab();
-		const nextTab = nextProps.tabs.find(tab => tab.id === parseInt(nextProps.match.params.id, 10));
+	componentDidMount() {
+		this.props.getRabbits();
+
+		if (!this.getItems().length) {
+			this.props.getTab(this.getTabId());
+		}
+	}
+
+	componentDidUpdate(prevProps) {
+		const prevTab = prevProps.tabs.find(tab => tab.id === this.getTabId()) || {};
+		const nextTab = this.getTab();
 
 		if (nextTab && (nextTab.tax_rate !== prevTab.tax_rate || nextTab.tip_rate !== prevTab.tip_rate)) {
 			const tipRate = parseFloat(nextTab.tip_rate, 10);

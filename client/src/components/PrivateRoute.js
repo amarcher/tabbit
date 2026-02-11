@@ -30,8 +30,12 @@ PrivateRoute.propTypes = {
 	component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
 	location: PropTypes.shape({
 		pathname: PropTypes.string.isRequired,
-	}).isRequired,
+	}),
 	authorized: PropTypes.bool.isRequired,
+};
+
+PrivateRoute.defaultProps = {
+	location: undefined,
 };
 
 export default connect(PrivateRoute);
